@@ -55,8 +55,7 @@
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      background: radial-gradient(circle, #00f, #00a);
-      box-shadow: 0 0 10px #00f;
+      box-shadow: 0 0 10px #fff;
       cursor: pointer;
       transition: transform 0.3s ease;
     }
@@ -114,9 +113,9 @@
   <div class="center">
     <div class="sun"></div>
     <div class="orbit">
-      <div class="planet" style="top: -120px; left: -30px;" onclick="openModal('about')"></div>
-      <div class="planet" style="top: 30px; left: 120px;" onclick="openModal('projects')"></div>
-      <div class="planet" style="top: 120px; left: -30px;" onclick="openModal('contact')"></div>
+      <div class="planet" style="top: -120px; left: -30px; background: radial-gradient(circle, #ff69b4, #c71585);" onclick="openModal('about')"></div>
+      <div class="planet" style="top: 30px; left: 120px; background: radial-gradient(circle, #32cd32, #006400);" onclick="openModal('projects')"></div>
+      <div class="planet" style="top: 120px; left: -30px; background: radial-gradient(circle, #1e90ff, #00008b);" onclick="openModal('contact')"></div>
     </div>
   </div>
 
@@ -129,7 +128,6 @@
   </div>
 
   <script>
-    // Falling stars like snow
     const canvas = document.getElementById('stars');
     const ctx = canvas.getContext('2d');
     let stars = [];
@@ -198,7 +196,6 @@
 
     animateStars();
 
-    // Modal logic
     function openModal(type) {
       const modal = document.getElementById('modal');
       const title = document.getElementById('modal-title');
