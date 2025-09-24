@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wuraito's Universe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wuraito - Space Bio</title>
   <style>
-    body {
+    html, body {
       margin: 0;
-      font-family: 'Quicksand', sans-serif;
-      background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77);
-      color: #f0f0f0;
-      overflow-x: hidden;
+      padding: 0;
+      background: #000;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
     }
 
     canvas {
@@ -20,193 +21,131 @@
       z-index: -1;
     }
 
-    .button-bar {
-      position: fixed;
-      top: 20px;
+    audio {
+      display: none;
+    }
+
+    .center {
+      position: absolute;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 20px;
-      z-index: 100;
-    }
-
-    .btn {
-      background: linear-gradient(145deg, #9d4edd, #7b2cbf);
-      color: #fff;
-      padding: 14px 28px;
-      font-size: 1em;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      box-shadow: 0 8px 20px rgba(123, 44, 191, 0.3);
-      transform-style: preserve-3d;
-    }
-
-    .btn:hover {
-      transform: rotateX(8deg) rotateY(-8deg) scale(1.05);
-      box-shadow: 0 12px 25px rgba(123, 44, 191, 0.5);
-    }
-
-    header {
+      transform: translate(-50%, -50%);
       text-align: center;
-      padding: 100px 20px 40px;
-      animation: fadeIn 2s ease-in-out;
     }
 
-    h1 {
-      font-size: 3em;
-      margin: 0;
-      color: #f4a261;
-      text-shadow: 0 0 10px #f4a261;
+    .sun {
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, #ffd700, #ff8c00);
+      border-radius: 50%;
+      box-shadow: 0 0 30px #ff8c00;
+      margin: 0 auto;
     }
 
-    p {
-      font-size: 1.2em;
-      max-width: 700px;
-      margin: 20px auto;
-      line-height: 1.6;
-      color: #e0e0e0;
+    .orbit {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: rotate 20s linear infinite;
     }
 
-    section {
-      padding: 80px 20px;
-      text-align: center;
-      animation: slideUp 2s ease-in-out;
-    }
-
-    h2 {
-      color: #e76f51;
-      font-size: 2em;
-      margin-bottom: 10px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 60px 20px;
-      font-size: 0.9em;
-      color: #ccc;
-      background-color: #0d1b2a;
-    }
-
-    .link-icons {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      margin-top: 30px;
-      position: relative;
-    }
-
-    .link-icons img {
-      width: 60px;
-      height: 60px;
-      filter: drop-shadow(0 0 5px #fff);
+    .planet {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #00f, #00a);
+      box-shadow: 0 0 10px #00f;
       cursor: pointer;
       transition: transform 0.3s ease;
     }
 
-    .link-icons img:hover {
-      transform: scale(1.1);
+    .planet:hover {
+      transform: scale(1.2);
     }
 
-    .bubble {
-      position: absolute;
-      top: -30px;
+    .modal {
+      position: fixed;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
-      background-color: #4caf50;
-      color: white;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.9em;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.5s ease;
+      transform: translate(-50%, -50%) scale(0);
+      background: rgba(20, 20, 40, 0.95);
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 400px;
+      box-shadow: 0 0 20px #fff;
+      transition: transform 0.3s ease;
+      z-index: 10;
     }
 
-    .bubble.show {
-      opacity: 1;
+    .modal.active {
+      transform: translate(-50%, -50%) scale(1);
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .modal h2 {
+      margin-top: 0;
+      color: #ffd700;
     }
 
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(40px); }
-      to { opacity: 1; transform: translateY(0); }
+    .close-btn {
+      background: none;
+      border: 1px solid #fff;
+      color: #fff;
+      padding: 5px 10px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    @keyframes rotate {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
     }
   </style>
 </head>
 <body>
-  <canvas id="starCanvas"></canvas>
+  <canvas id="stars"></canvas>
+  <audio autoplay loop>
+    <source src="musica.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 
-  <div class="button-bar">
-    <button class="btn" onclick="window.open('https://www.roblox.com/users/2517791964/profile', '_blank')">Roblox</button>
-    <button class="btn" onclick="copyDiscord()">Discord</button>
+  <div class="center">
+    <div class="sun"></div>
+    <div class="orbit">
+      <div class="planet" style="top: -120px; left: -30px;" onclick="openModal('about')"></div>
+      <div class="planet" style="top: 30px; left: 120px;" onclick="openModal('projects')"></div>
+      <div class="planet" style="top: 120px; left: -30px;" onclick="openModal('contact')"></div>
+    </div>
   </div>
 
-  <header>
-    <h1>Wuraito's Universe</h1>
-    <p>Welcome to my cosmic sanctuary — a quiet space where introversion meets imagination. I’m Wuraito, 16, and I find peace in the stars and stories that bend time.</p>
-  </header>
-
-  <section>
-    <h2>🌌 What I Like</h2>
-    <p>I love the mystery of space, the silence between stars, and the beauty of supernovas. I enjoy thinking deeply, creating quietly, and exploring the unknown — especially through games like <em>In Stars and Time</em>, where time loops and emotional depth collide.</p>
-  </section>
-
-  <section>
-    <h2>🪐 My Vibe</h2>
-    <p>Mostly introverted, but it all depends on the gravity of the moment. I navigate loops of thought and feeling, adapting to the context and constellation of people around me.</p>
-  </section>
-
-  <section>
-    <h2>🎮 Favorite Game</h2>
-    <p><strong>In Stars and Time</strong> is a masterpiece — a turn-based RPG that blends humor, heartbreak, and time loops. It’s not just a game, it’s a journey through memory, choice, and connection. I resonate with its quiet strength and emotional depth.</p>
-  </section>
-
-  <section>
-    <h2>🔗 My Links</h2>
-    <p>Explore more of my universe through these portals:</p>
-    <div class="link-icons">
-      <a href="https://www.roblox.com/users/2517791964/profile" target="_blank" title="Roblox">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Roblox_Logo_2022.svg" alt="Roblox">
-      </a>
-      <button onclick="copyDiscord()" title="Copy Discord Username" style="background: none; border: none; position: relative;">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/Discord_logo.svg" alt="Discord">
-        <div class="bubble" id="bubble">Successful!</div>
-      </button>
-    </div>
-  </section>
-
-  <section>
-    <h2>🌠 Final Thoughts</h2>
-    <p>Thanks for visiting my universe. Whether you're looping through time or drifting through stars, I hope you find peace in your own orbit.</p>
-  </section>
-
-  <footer>
-    Made with stardust and solitude by Wuraito ✨
-  </footer>
+  <div id="modal" class="modal">
+    <h2 id="modal-title">About Wuraito</h2>
+    <p id="modal-content">
+      Wuraito is a creative technologist passionate about immersive web experiences, blending design and code to build interactive worlds. With a love for space and storytelling, Wuraito crafts digital galaxies that captivate and inspire.
+    </p>
+    <button class="close-btn" onclick="closeModal()">Close</button>
+  </div>
 
   <script>
-    const canvas = document.getElementById('starCanvas');
+    // Falling stars like snow
+    const canvas = document.getElementById('stars');
     const ctx = canvas.getContext('2d');
     let stars = [];
-    let mouse = { x: null, y: null };
+    let mouse = { x: -1000, y: -1000 };
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    window.addEventListener('resize', () => {
+    function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-    });
+    }
 
-    window.addEventListener('mousemove', (e) => {
-      mouse.x = e.x;
-      mouse.y = e.y;
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    window.addEventListener('mousemove', e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
     });
 
     class Star {
@@ -214,35 +153,74 @@
         this.reset(true);
       }
 
-      reset(randomY = false) {
+      reset(initial = false) {
         this.x = Math.random() * canvas.width;
-        this.y = randomY ? Math.random() * canvas.height : -10;
-        this.radius = Math.random() * 2 + 1;
-        this.vx = 0;
-        this.vy = Math.random() * 0.5 + 0.5;
+        this.y = initial ? Math.random() * canvas.height : -10;
+        this.vy = 0.5 + Math.random() * 1.5;
+        this.size = Math.random() * 1 + 0.5;
+      }
+
+      update() {
+        const dx = this.x - mouse.x;
+        const dy = this.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 100) {
+          this.x += dx / dist;
+          this.y += dy / dist;
+        } else {
+          this.y += this.vy;
+        }
+
+        if (this.y > canvas.height + 10) this.reset();
       }
 
       draw() {
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = '#ffffff';
-        ctx.shadowColor = '#ffffff';
-        ctx.shadowBlur = 10;
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = '#fff';
         ctx.fill();
-        ctx.closePath();
+      }
+    }
+
+    for (let i = 0; i < 200; i++) {
+      stars.push(new Star());
+    }
+
+    function animateStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach(star => {
+        star.update();
+        star.draw();
+      });
+      requestAnimationFrame(animateStars);
+    }
+
+    animateStars();
+
+    // Modal logic
+    function openModal(type) {
+      const modal = document.getElementById('modal');
+      const title = document.getElementById('modal-title');
+      const content = document.getElementById('modal-content');
+
+      if (type === 'about') {
+        title.textContent = 'About Wuraito';
+        content.textContent = 'Wuraito is a creative technologist passionate about immersive web experiences, blending design and code to build interactive worlds. With a love for space and storytelling, Wuraito crafts digital galaxies that captivate and inspire.';
+      } else if (type === 'projects') {
+        title.textContent = 'Projects';
+        content.textContent = 'Wuraito builds interactive portfolios, generative art, and space-themed games using HTML, CSS, and JavaScript.';
+      } else if (type === 'contact') {
+        title.textContent = 'Contact';
+        content.textContent = 'Reach Wuraito via Discord: @Wuraito#0001 or explore the stars together!';
       }
 
-      update() {
-        const distX = this.x - mouse.x;
-        const distY = this.y - mouse.y;
-        const distance = Math.sqrt(distX * distX + distY * distY);
-        const repulsionRadius = 100;
+      modal.classList.add('active');
+    }
 
-        if (distance < repulsionRadius) {
-          const angle = Math.atan2(distY, distX);
-          const force = (repulsionRadius - distance) / repulsionRadius;
-          this.vx += Math.cos(angle) * force * 0.3;
-          this.vy += Math.sin(angle) * force * 0.3;
-        }
-
-        this.vy += 0.01;
+    function closeModal() {
+      document.getElementById('modal').classList.remove('active');
+    }
+  </script>
+</body>
+</html>
