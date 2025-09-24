@@ -81,7 +81,7 @@
   </style>
 </head>
 <body>
-  <!-- 🎵 Música de fondo (se inicia con interacción) -->
+  <!-- 🎵 Música de fondo -->
   <audio id="bgMusic" src="musica.mp3" loop></audio>
 
   <canvas id="stars"></canvas>
@@ -97,13 +97,13 @@
       <p>Soy una persona creativa, curiosa y siempre en busca de nuevas experiencias. Me encanta el diseño, la tecnología y todo lo que tenga un toque visual atractivo.</p>
     </div>
 
-    <button onclick="startMusic(); toggleUI()">Entrar al portal</button>
+    <button onclick="fadeInMusic(); toggleUI()">Entrar al portal</button>
   </div>
 
   <div class="alt-ui" id="altUI">
     <h2>🌌 Bienvenido al otro lado</h2>
     <p>Has atravesado el portal. Aquí puedes descubrir contenido oculto, ideas cósmicas o simplemente disfrutar del viaje.</p>
-    <button onclick="toggleUI()">Volver</button>
+    <button onclick="fadeOutMusic(); toggleUI()">Volver</button>
   </div>
 
   <script>
@@ -131,7 +131,7 @@
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         size: Math.random() * 2,
-        vy: Math.random() * 1 + 0.5 // velocidad vertical (caída)
+        vy: Math.random() * 1 + 0.5
       });
     }
 
@@ -140,7 +140,6 @@
       ctx.fillStyle = 'white';
 
       stars.forEach(star => {
-        // Repulsión
         if (mouse.x !== null && mouse.y !== null) {
           const dx = star.x - mouse.x;
           const dy = star.y - mouse.y;
@@ -154,10 +153,8 @@
           }
         }
 
-        // Caída
         star.y += star.vy;
 
-        // Reinicio desde arriba si cae fuera
         if (star.y > canvas.height) {
           star.y = 0;
           star.x = Math.random() * canvas.width;
@@ -189,11 +186,31 @@
       }
     }
 
-    function startMusic() {
+    function fadeInMusic() {
       const audio = document.getElementById('bgMusic');
-      audio.play().catch(e => {
-        console.log("El navegador bloqueó el autoplay. Se necesita interacción.");
-      });
+      audio.play().catch(() => {});
+      let volume = audio.volume || 0;
+      const interval = setInterval(() => {
+        volume += 0.02;
+        if (volume >= 1) {
+          volume = 1;
+          clearInterval(interval);
+        }
+        audio.volume = volume;
+      }, 50);
+    }
+
+    function fadeOutMusic() {
+      const audio = document.getElementById('bgMusic');
+      let volume = audio.volume || 1;
+      const interval = setInterval(() => {
+        volume -= 0.02;
+        if (volume <= 0) {
+          volume = 0;
+          clearInterval(interval);
+        }
+        audio.volume = volume;
+      }, 50);
     }
   </script>
 </body>
