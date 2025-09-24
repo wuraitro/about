@@ -82,7 +82,7 @@
 </head>
 <body>
   <!-- 🎵 Música de fondo -->
-  <audio id="bgMusic" src="musica.mp3" autoplay loop></audio>
+  <audio src="musica.mp3" autoplay loop></audio>
 
   <canvas id="stars"></canvas>
 
@@ -157,8 +157,13 @@
           }
         }
 
+        // Movimiento
         star.x += star.vx;
         star.y += star.vy;
+
+        // Fricción cósmica
+        star.vx *= 0.98;
+        star.vy *= 0.98;
 
         // Teletransportación espacial
         if (star.x < 0) star.x = canvas.width;
