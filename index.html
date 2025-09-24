@@ -132,39 +132,6 @@
       font-size: 2em;
       color: #fff;
     }
-
-    .volume-planet-container {
-      position: absolute;
-      bottom: 50px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    #volume-slider {
-      width: 150px;
-      appearance: none;
-      background: transparent;
-      cursor: pointer;
-      margin-bottom: 10px;
-    }
-
-    #volume-slider::-webkit-slider-thumb {
-      appearance: none;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #00ffff, #0000ff);
-      box-shadow: 0 0 10px #00ffff;
-      animation: spin 2s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
   </style>
 </head>
 <body>
@@ -187,15 +154,12 @@
       <div class="planet" style="top: 120px; left: -30px; background: radial-gradient(circle, #1e90ff, #00008b);" onclick="openModal('contact')"></div>
       <div class="planet" style="top: -30px; left: -120px; background: radial-gradient(circle, #ffa500, #ff4500);" onclick="openModal('extra')"></div>
     </div>
-    <div class="volume-planet-container">
-      <input type="range" min="0" max="1" step="0.01" value="0.3" id="volume-slider" />
-    </div>
   </div>
 
   <div id="modal" class="modal">
     <h2 id="modal-title">About Wuraito</h2>
     <p id="modal-content">
-      The night sky inspires me to stay curious and humble. Like planets, I follow my own path but respect others’. We’re all stardust, and that thought keeps me grounded.
+     The night sky inspires me to stay curious and humble. Like planets, I follow my own path but respect others’. We’re all stardust, and that thought keeps me grounded.
     </p>
     <button class="close-btn" onclick="closeModal()">Close</button>
   </div>
@@ -277,4 +241,28 @@
       if (type === 'about') {
         title.textContent = 'Thoughts';
         content.textContent = 'The night sky inspires me to stay curious and humble. Like planets, I follow my own path but respect others’. We’re all stardust, and that thought keeps me grounded.';
-      } else if (type === 'projects
+      } else if (type === 'projects') {
+        title.textContent = 'About Me';
+        content.textContent = 'Mostly introverted, but it depends on the moment and the people. I value fairness and honesty above everything.';
+      } else if (type === 'contact') {
+        title.textContent = 'Contact';
+        content.textContent = 'Friend me on Discord so we can chat: Wuraitro!';
+      } else if (type === 'extra') {
+        title.textContent = 'WIP!';
+        content.textContent = 'This mysterious planet holds secrets yet to be discovered. Stay curious you silly!';
+      }
+
+      modal.classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('active');
+    }
+
+    function startExperience() {
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('bg-music').play();
+    }
+  </script>
+</body>
+</html>
