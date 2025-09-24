@@ -1,281 +1,262 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portal Cósmico</title>
+  <title>Wuraito's Universe</title>
   <style>
     body {
       margin: 0;
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77);
+      color: #f0f0f0;
       overflow-x: hidden;
-      overflow-y: auto;
-      font-family: 'Montserrat', sans-serif;
-      background-color: black;
-      color: white;
-      transition: box-shadow 0.5s ease;
-      position: relative;
     }
 
-    body.cosmic-mode::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      box-shadow: inset 0 0 100px rgba(255, 0, 0, 0.3);
-      pointer-events: none;
-      z-index: -1;
+    header {
+      text-align: center;
+      padding: 100px 20px 40px;
+      animation: fadeIn 2s ease-in-out;
     }
 
-    body.cosmic-mode {
-      animation: beatZoom 1s infinite;
+    h1 {
+      font-size: 3em;
+      margin: 0;
+      color: #f4a261;
+      text-shadow: 0 0 10px #f4a261;
     }
 
-    @keyframes beatZoom {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.02); }
+    p {
+      font-size: 1.2em;
+      max-width: 700px;
+      margin: 20px auto;
+      line-height: 1.6;
+      color: #e0e0e0;
+    }
+
+    section {
+      padding: 80px 20px;
+      text-align: center;
+      animation: slideUp 2s ease-in-out;
+    }
+
+    h2 {
+      color: #e76f51;
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 60px 20px;
+      font-size: 0.9em;
+      color: #ccc;
+      background-color: #0d1b2a;
     }
 
     canvas {
       position: fixed;
       top: 0;
       left: 0;
-      z-index: -2;
+      z-index: -1;
     }
 
-    .container, .alt-ui {
-      transition: transform 1s ease, opacity 1s ease;
-      transform-origin: center;
-      position: relative;
-      z-index: 1;
-    }
-
-    .container.hidden {
-      transform: scale(0);
-      opacity: 0;
-    }
-
-    .alt-ui {
-      display: none;
-      text-align: center;
-      padding: 4rem 2rem;
+    .link-icons {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 30px;
       position: relative;
     }
 
-    .alt-ui.visible {
-      display: block;
-      animation: expandUI 1s ease forwards;
-    }
-
-    @keyframes expandUI {
-      from { transform: scale(0); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    header {
-      text-align: center;
-      padding: 4rem 2rem;
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 12px;
-      margin: 2rem auto;
-      padding: 2rem;
-      max-width: 600px;
-      backdrop-filter: blur(10px);
-    }
-
-    button {
-      display: block;
-      margin: 1rem auto;
-      padding: 1rem 2rem;
-      font-size: 1rem;
-      background: white;
-      color: black;
-      border: none;
-      border-radius: 8px;
+    .link-icons img {
+      width: 60px;
+      height: 60px;
+      filter: drop-shadow(0 0 5px #fff);
       cursor: pointer;
       transition: transform 0.3s ease;
     }
 
-    button:hover {
-      transform: scale(1.05);
+    .link-icons img:hover {
+      transform: scale(1.1);
     }
 
-    html {
-      scroll-behavior: smooth;
+    .bubble {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #4caf50;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+    .bubble.show {
+      opacity: 1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <audio id="bgMusic" src="musica.mp3" loop></audio>
-  <canvas id="stars"></canvas>
+  <canvas id="starCanvas"></canvas>
 
-  <div class="container" id="mainUI">
-    <header>
-      <h1>¡Hola, soy [Tu Nombre]!</h1>
-      <p>Bienvenido a mi universo personal. Aquí comparto quién soy y lo que me apasiona.</p>
-    </header>
+  <header>
+    <h1>Wuraito's Universe</h1>
+    <p>Welcome to my cosmic sanctuary — a quiet space where introversion meets imagination. I’m Wuraito, 16, and I find peace in the stars and stories that bend time.</p>
+  </header>
 
-    <div class="card">
-      <h2>Sobre mí</h2>
-      <p>Soy una persona creativa, curiosa y siempre en busca de nuevas experiencias. Me encanta el diseño, la tecnología y todo lo que tenga un toque visual atractivo.</p>
+  <section>
+    <h2>🌌 What I Like</h2>
+    <p>I love the mystery of space, the silence between stars, and the beauty of supernovas. I enjoy thinking deeply, creating quietly, and exploring the unknown — especially through games like <em>In Stars and Time</em>, where time loops and emotional depth collide.</p>
+  </section>
+
+  <section>
+    <h2>🪐 My Vibe</h2>
+    <p>Mostly introverted, but it all depends on the gravity of the moment. Like Siffrin from <em>In Stars and Time</em>, I navigate loops of thought and feeling, adapting to the context and constellation of people around me.</p>
+  </section>
+
+  <section>
+    <h2>🎮 Favorite Game</h2>
+    <p><strong>In Stars and Time</strong> is a masterpiece — a turn-based RPG that blends humor, heartbreak, and time loops. It’s not just a game, it’s a journey through memory, choice, and connection. I resonate with its quiet strength and emotional depth.</p>
+  </section>
+
+  <section>
+    <h2>🔗 My Links</h2>
+    <p>Explore more of my universe through these portals:</p>
+    <div class="link-icons">
+      <!-- Roblox Link -->
+      <a href="https://www.roblox.com/users/2517791964/profile" target="_blank" title="Roblox">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Roblox_Logo_2022.svg" alt="Roblox">
+      </a>
+
+      <!-- Discord Copy Button -->
+      <button onclick="copyDiscord()" title="Copy Discord Username" style="background: none; border: none; position: relative;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/Discord_logo.svg" alt="Discord">
+        <div class="bubble" id="bubble">Successful!</div>
+      </button>
     </div>
+  </section>
 
-    <div class="card">
-      <h2>Mi historia</h2>
-      <p>Desde pequeño me ha fascinado el arte digital y la forma en que podemos crear mundos con solo imaginación y código. Estudié diseño gráfico y desarrollo web, y ahora combino ambas pasiones para crear experiencias únicas.</p>
-    </div>
+  <section>
+    <h2>🌠 Final Thoughts</h2>
+    <p>Thanks for visiting my universe. Whether you're looping through time or drifting through stars, I hope you find peace in your own orbit.</p>
+  </section>
 
-    <div class="card">
-      <h2>Mis pasiones</h2>
-      <ul>
-        <li>🎨 Diseño visual y branding</li>
-        <li>💻 Desarrollo web y animaciones interactivas</li>
-        <li>📷 Fotografía artística</li>
-        <li>🎶 Música electrónica y ambient</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h2>Contacto</h2>
-      <p>¿Te gustaría colaborar o simplemente charlar? Puedes escribirme a <strong>tunombre@email.com</strong> o encontrarme en redes sociales.</p>
-    </div>
-
-    <button onclick="fadeInMusic(); toggleUI()">Entrar al portal</button>
-  </div>
-
-  <div class="alt-ui" id="altUI">
-    <h2>🌌 Bienvenido al otro lado</h2>
-    <p>Has atravesado el portal. Aquí puedes descubrir contenido oculto, ideas cósmicas o simplemente disfrutar del viaje.</p>
-
-    <button onclick="activateCosmicMode('favorito1.mp3')">Favorito 1</button>
-    <button onclick="activateCosmicMode('favorito2.mp3')">Favorito 2</button>
-    <button onclick="activateCosmicMode('favorito3.mp3')">Favorito 3</button>
-
-    <button onclick="fadeOutMusic(); toggleUI(); deactivateCosmicMode()">Volver</button>
-  </div>
+  <footer>
+    Made with stardust and solitude by Wuraito ✨
+  </footer>
 
   <script>
-    const canvas = document.getElementById('stars');
+    const canvas = document.getElementById('starCanvas');
     const ctx = canvas.getContext('2d');
-    const audio = document.getElementById('bgMusic');
     let stars = [];
     let mouse = { x: null, y: null };
-    const repelRadius = 100;
-    let cosmicMode = false;
 
-    function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    window.addEventListener('mousemove', e => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
     });
 
-    for (let i = 0; i < 200; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: Math.random() * 2,
-        vy: Math.random() * 1 + 0.5,
-        color: 'white',
-        glow: 0
-      });
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.x;
+      mouse.y = e.y;
+    });
+
+    class Star {
+      constructor() {
+        this.reset(true);
+      }
+
+      reset(randomY = false) {
+        this.x = Math.random() * canvas.width;
+        this.y = randomY ? Math.random() * canvas.height : -10;
+        this.radius = Math.random() * 2 + 1;
+        this.vx = 0;
+        this.vy = Math.random() * 0.5 + 0.5;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = '#ffffff';
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.closePath();
+      }
+
+      update() {
+        const distX = this.x - mouse.x;
+        const distY = this.y - mouse.y;
+        const distance = Math.sqrt(distX * distX + distY * distY);
+        const repulsionRadius = 100;
+
+        if (distance < repulsionRadius) {
+          const angle = Math.atan2(distY, distX);
+          const force = (repulsionRadius - distance) / repulsionRadius;
+          this.vx += Math.cos(angle) * force * 0.3;
+          this.vy += Math.sin(angle) * force * 0.3;
+        }
+
+        this.vy += 0.01;
+
+        this.x += this.vx;
+        this.y += this.vy;
+
+        this.vx *= 0.95;
+        this.vy *= 0.98;
+
+        if (this.y > canvas.height + 10 || this.x < -50 || this.x > canvas.width + 50) {
+          this.reset();
+        }
+
+        this.draw();
+      }
+    }
+
+    function initStars() {
+      stars = [];
+      for (let i = 0; i < 150; i++) {
+        stars.push(new Star());
+      }
     }
 
     function animateStars() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      stars.forEach(star => {
-        if (mouse.x !== null && mouse.y !== null) {
-          const dx = star.x - mouse.x;
-          const dy = star.y - mouse.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < repelRadius) {
-            const angle = Math.atan2(dy, dx);
-            const force = (repelRadius - distance) / repelRadius;
-            star.x += Math.cos(angle) * force * 5;
-            star.y += Math.sin(angle) * force * 5;
-          }
-        }
-
-        star.y += cosmicMode ? 10 : star.vy;
-
-        if (star.y > canvas.height) {
-          star.y = 0;
-          star.x = Math.random() * canvas.width;
-        }
-
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fillStyle = star.color;
-        ctx.shadowColor = star.color;
-        ctx.shadowBlur = star.glow;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-      });
-
+      stars.forEach(star => star.update());
       requestAnimationFrame(animateStars);
     }
 
+    initStars();
     animateStars();
 
-    function toggleUI() {
-      const main = document.getElementById('mainUI');
-      const alt = document.getElementById('altUI');
-      if (!main.classList.contains('hidden')) {
-        main.classList.add('hidden');
+    function copyDiscord() {
+      const discordUsername = "Wuraitro";
+      navigator.clipboard.writeText(discordUsername).then(() => {
+        const bubble = document.getElementById("bubble");
+        bubble.classList.add("show");
         setTimeout(() => {
-          alt.classList.add('visible');
-        }, 1000);
-      } else {
-        alt.classList.remove('visible');
-        setTimeout(() => {
-          main.classList.remove('hidden');
-        }, 1000);
-      }
+          bubble.classList.remove("show");
+        }, 3000);
+      });
     }
-
-    function fadeInMusic() {
-      audio.src = "musica.mp3";
-      audio.play().catch(() => {});
-      let volume = 0;
-      const interval = setInterval(() => {
-        volume += 0.02;
-        if (volume >= 1) {
-          volume = 1;
-          clearInterval(interval);
-        }
-        audio.volume = volume;
-      }, 50);
-    }
-
-    function fadeOutMusic() {
-      let volume = audio.volume || 1;
-      const interval = setInterval(() => {
-        volume -= 0.02;
-        if (volume <= 0) {
-          volume = 0;
-          clearInterval(interval);
-          audio.pause();
-        }
-        audio.volume = volume;
-      }, 50);
-    }
-
-    function activateCosmicMode(fileName) {
-      audio.src = fileName;
-      audio.play().catch(() => {});
-      document.body.classList.add('cosmic-mode');
-      cosmicMode = true;
-      stars.forEach(star => {
-        star.color = 'red';
+  </script>
+</body>
+</html>
