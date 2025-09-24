@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cosmic Portal</title>
+  <title>Portal Cósmico</title>
   <style>
     body {
       margin: 0;
@@ -113,31 +113,27 @@
 
   <div class="container" id="mainUI">
     <header>
-      <h1>Hello, I'm Adrián!</h1>
-      <p>Welcome to my personal universe. Here I share who I am and what I love.</p>
+      <h1>¡Hola, soy [Tu Nombre]!</h1>
+      <p>Bienvenido a mi universo personal. Aquí comparto quién soy y lo que me apasiona.</p>
     </header>
 
     <div class="card">
-      <h2>About Me</h2>
-      <p>I'm a creative, curious soul who loves design, technology, and visually stunning experiences. I’m into animated series, psychological thrillers, and indie games that make you think.</p>
+      <h2>Sobre mí</h2>
+      <p>Soy una persona creativa, curiosa y siempre en busca de nuevas experiencias. Me encanta el diseño, la tecnología y todo lo que tenga un toque visual atractivo.</p>
     </div>
 
-    <button onclick="fadeInMusic(); toggleUI()">Enter the Portal</button>
+    <button onclick="fadeInMusic(); toggleUI()">Entrar al portal</button>
   </div>
 
   <div class="alt-ui" id="altUI">
-    <h2>🌌 Welcome to the Other Side</h2>
-    <p>You’ve crossed the portal. Explore hidden content, cosmic ideas, or just enjoy the ride.</p>
+    <h2>🌌 Bienvenido al otro lado</h2>
+    <p>Has atravesado el portal. Aquí puedes descubrir contenido oculto, ideas cósmicas o simplemente disfrutar del viaje.</p>
 
-    <button onclick="activateTheme('murderDrones')">Murder Drones</button>
-    <button onclick="activateTheme('blueLock')">Blue Lock</button>
-    <button onclick="activateTheme('dexter')">Dexter Morgan</button>
-    <button onclick="activateTheme('breakingBad')">Breaking Bad</button>
-    <button onclick="activateTheme('undertale')">Undertale</button>
-    <button onclick="activateTheme('inStarsAndTime')">In Stars and Time</button>
-    <button onclick="activateTheme('slayTheSpire')">Slay the Spire</button>
+    <button onclick="activateCosmicMode('favorito1.mp3')">Favorito 1</button>
+    <button onclick="activateCosmicMode('favorito2.mp3')">Favorito 2</button>
+    <button onclick="activateCosmicMode('favorito3.mp3')">Favorito 3</button>
 
-    <button onclick="fadeOutMusic(); toggleUI(); deactivateCosmicMode()">Go Back</button>
+    <button onclick="fadeOutMusic(); toggleUI(); deactivateCosmicMode()">Volver</button>
   </div>
 
   <script>
@@ -254,12 +250,28 @@
       }, 50);
     }
 
-    function activateTheme(theme) {
+    function activateCosmicMode(fileName) {
+      audio.src = fileName;
+      audio.play().catch(() => {});
       document.body.classList.add('cosmic-mode');
       cosmicMode = true;
+      stars.forEach(star => {
+        star.color = 'red';
+        star.glow = 10;
+      });
+    }
 
-      const themeColors = {
-        murderDrones: { color: '#ff00ff', glow: 12, music: 'murder.mp3' },
-        blueLock: { color: '#00ccff', glow: 8, music: 'bluelock.mp3' },
-        dexter: { color: '#ff3333', glow: 10, music: 'dexter.mp3' },
-        breakingBad: { color: '#00ff00', glow: 10, music: 'breaking
+    function deactivateCosmicMode() {
+      document.body.classList.remove('cosmic-mode');
+      cosmicMode = false;
+      stars.forEach(star => {
+        star.color = 'white';
+        star.glow = 0;
+        star.vy = Math.random() * 1 + 0.5;
+      });
+      audio.pause();
+      audio.src = "musica.mp3";
+    }
+  </script>
+</body>
+</html>
