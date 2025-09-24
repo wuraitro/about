@@ -142,7 +142,6 @@
 <body>
   <canvas id="starCanvas"></canvas>
 
-  <!-- Floating Button Bar -->
   <div class="button-bar">
     <button class="btn" onclick="window.open('https://www.roblox.com/users/2517791964/profile', '_blank')">Roblox</button>
     <button class="btn" onclick="copyDiscord()">Discord</button>
@@ -243,4 +242,7 @@
           const angle = Math.atan2(distY, distX);
           const force = (repulsionRadius - distance) / repulsionRadius;
           this.vx += Math.cos(angle) * force * 0.3;
-          this.vy += Math.sin(angle) * force * 0.3
+          this.vy += Math.sin(angle) * force * 0.3;
+        }
+
+        this.vy += 0.01;
