@@ -5,39 +5,222 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portal Cósmico</title>
   <style>
-    /* Estilos omitidos por brevedad: incluye fondo negro, estrellas, bordes, botones, animaciones */
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Montserrat', sans-serif;
+      background-color: black;
+      color: white;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -2;
+    }
+
+    .container, .alt-ui {
+      transition: transform 1s ease, opacity 1s ease;
+      transform-origin: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .container.hidden {
+      transform: scale(0);
+      opacity: 0;
+    }
+
+    .alt-ui {
+      display: none;
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .alt-ui.visible {
+      display: block;
+      animation: expandUI 1s ease forwards;
+    }
+
+    @keyframes expandUI {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    header {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      margin: 2rem auto;
+      padding: 2rem;
+      max-width: 600px;
+      backdrop-filter: blur(10px);
+    }
+
+    button {
+      display: block;
+      margin: 1rem auto;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      background: white;
+      color: black;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
   <audio id="bgMusic" src="musica.mp3" loop></audio>
+
   <canvas id="stars"></canvas>
 
   <div class="container" id="mainUI">
-    <header id="mainHeader">
+    <header>
       <h1>¡Hola, soy [Tu Nombre]!</h1>
       <p>Bienvenido a mi universo personal. Aquí comparto quién soy y lo que me apasiona.</p>
     </header>
-    <div class="card" id="mainCard">
+
+    <div class="card">
       <h2>Sobre mí</h2>
-      <p>Soy una persona creativa, curiosa y siempre en busca de nuevas experiencias.</p>
+      <p>Soy una persona creativa, curiosa y siempre en busca de nuevas experiencias. Me encanta el diseño, la tecnología y todo lo que tenga un toque visual atractivo.</p>
     </div>
+
     <button onclick="fadeInMusic(); toggleUI()">Entrar al portal</button>
   </div>
 
   <div class="alt-ui" id="altUI">
     <h2>🌌 Bienvenido al otro lado</h2>
-    <p>Has atravesado el portal. Aquí puedes descubrir contenido oculto.</p>
-    <img src="https://i.ytimg.com/vi/EOQt4tQFf_A/mqdefault.jpg" alt="Favorito 1" style="max-width: 300px; border-radius: 12px; margin-bottom: 1rem;" />
-    <button onclick="toggleFavorito1()">Favorito 1</button>
+    <p>Has atravesado el portal. Aquí puedes descubrir contenido oculto, ideas cósmicas o simplemente disfrutar del viaje.</p>
+
+    <!-- 🎶 Botones para cambiar la música -->
+    <button onclick="changeMusic('favorito1.mp3')">Favorito 1</button>
     <button onclick="changeMusic('favorito2.mp3')">Favorito 2</button>
     <button onclick="changeMusic('favorito3.mp3')">Favorito 3</button>
+
     <button onclick="fadeOutMusic(); toggleUI()">Volver</button>
   </div>
 
   <script>
-    // JavaScript completo con animación de estrellas, música, beat detection, y toggleFavorito1
-    // Incluye funciones: resizeCanvas, animateStars, fadeInMusic, fadeOutMusic, changeMusic, toggleFavorito1
-    // toggleFavorito1 activa o desactiva el modo reactivo con estrellas rojas, bordes rojizos y zoom al beat
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    const audio = document.getElementById('bgMusic');
+    let stars = [];
+    let mouse = { x: null, y: null };
+    const repelRadius = 100;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    window.addEventListener('mousemove', e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    for (let i = 0; i < 200; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2,
+        vy: Math.random() * 1 + 0.5
+      });
+    }
+
+    function animateStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'white';
+
+      stars.forEach(star => {
+        if (mouse.x !== null && mouse.y !== null) {
+          const dx = star.x - mouse.x;
+          const dy = star.y - mouse.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < repelRadius) {
+            const angle = Math.atan2(dy, dx);
+            const force = (repelRadius - distance) / repelRadius;
+            star.x += Math.cos(angle) * force * 5;
+            star.y += Math.sin(angle) * force * 5;
+          }
+        }
+
+        star.y += star.vy;
+
+        if (star.y > canvas.height) {
+          star.y = 0;
+          star.x = Math.random() * canvas.width;
+        }
+
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      requestAnimationFrame(animateStars);
+    }
+
+    animateStars();
+
+    function toggleUI() {
+      const main = document.getElementById('mainUI');
+      const alt = document.getElementById('altUI');
+      if (!main.classList.contains('hidden')) {
+        main.classList.add('hidden');
+        setTimeout(() => {
+          alt.classList.add('visible');
+        }, 1000);
+      } else {
+        alt.classList.remove('visible');
+        setTimeout(() => {
+          main.classList.remove('hidden');
+        }, 1000);
+      }
+    }
+
+    function fadeInMusic() {
+      audio.play().catch(() => {});
+      let volume = audio.volume || 0;
+      const interval = setInterval(() => {
+        volume += 0.02;
+        if (volume >= 1) {
+          volume = 1;
+          clearInterval(interval);
+        }
+        audio.volume = volume;
+      }, 50);
+    }
+
+    function fadeOutMusic() {
+      let volume = audio.volume || 1;
+      const interval = setInterval(() => {
+        volume -= 0.02;
+        if (volume <= 0) {
+          volume = 0;
+          clearInterval(interval);
+        }
+        audio.volume = volume;
+      }, 50);
+    }
+
+    function changeMusic(fileName) {
+      audio.src = fileName;
+      audio.play().catch(() => {});
+    }
   </script>
 </body>
 </html>
