@@ -11,47 +11,7 @@
       background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77);
       color: #f0f0f0;
       overflow-x: hidden;
-    }
-
-    header {
-      text-align: center;
-      padding: 100px 20px 40px;
-      animation: fadeIn 2s ease-in-out;
-    }
-
-    h1 {
-      font-size: 3em;
-      margin: 0;
-      color: #f4a261;
-      text-shadow: 0 0 10px #f4a261;
-    }
-
-    p {
-      font-size: 1.2em;
-      max-width: 700px;
-      margin: 20px auto;
-      line-height: 1.6;
-      color: #e0e0e0;
-    }
-
-    section {
-      padding: 80px 20px;
-      text-align: center;
-      animation: slideUp 2s ease-in-out;
-    }
-
-    h2 {
-      color: #e76f51;
-      font-size: 2em;
-      margin-bottom: 10px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 60px 20px;
-      font-size: 0.9em;
-      color: #ccc;
-      background-color: #0d1b2a;
+      scroll-behavior: smooth;
     }
 
     canvas {
@@ -59,6 +19,59 @@
       top: 0;
       left: 0;
       z-index: -1;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(60, 30, 90, 0.8);
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 15px 0;
+      z-index: 10;
+    }
+
+    .nav-btn {
+      color: white;
+      background: #8e44ad;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      perspective: 1000px;
+    }
+
+    .nav-btn:hover {
+      transform: rotateX(10deg) rotateY(10deg) scale(1.05);
+    }
+
+    header, section, footer {
+      text-align: center;
+      padding: 100px 20px 60px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #f4a261;
+      text-shadow: 0 0 10px #f4a261;
+    }
+
+    h2 {
+      font-size: 2em;
+      color: #e76f51;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.2em;
+      line-height: 1.6;
+      color: #e0e0e0;
     }
 
     .link-icons {
@@ -100,60 +113,56 @@
       opacity: 1;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(40px); }
-      to { opacity: 1; transform: translateY(0); }
+    footer {
+      font-size: 0.9em;
+      color: #ccc;
+      background-color: #0d1b2a;
     }
   </style>
 </head>
 <body>
   <canvas id="starCanvas"></canvas>
 
-  <header>
+  <nav>
+    <button class="nav-btn" onclick="scrollToSection('about')">About</button>
+    <button class="nav-btn" onclick="scrollToSection('vibe')">Vibe</button>
+    <button class="nav-btn" onclick="scrollToSection('game')">Game</button>
+    <button class="nav-btn" onclick="scrollToSection('links')">Links</button>
+    <button class="nav-btn" onclick="scrollToSection('final')">Final</button>
+  </nav>
+
+  <header id="about">
     <h1>Wuraito's Universe</h1>
-    <p>Welcome to my cosmic sanctuary — a quiet space where introversion meets imagination. I’m Wuraito, 16, and I find peace in the stars and stories that bend time.</p>
+    <p>Hey, I'm Wuraito. I'm 16 and I like quiet moments, deep thoughts, and stories that mess with time.</p>
   </header>
 
-  <section>
-    <h2>🌌 What I Like</h2>
-    <p>I love the mystery of space, the silence between stars, and the beauty of supernovas. I enjoy thinking deeply, creating quietly, and exploring the unknown — especially through games like <em>In Stars and Time</em>, where time loops and emotional depth collide.</p>
-  </section>
-
-  <section>
+  <section id="vibe">
     <h2>🪐 My Vibe</h2>
-    <p>Mostly introverted, but it all depends on the gravity of the moment. Like Siffrin from <em>In Stars and Time</em>, I navigate loops of thought and feeling, adapting to the context and constellation of people around me.</p>
+    <p>I’m mostly introverted, but I open up depending on the situation. I like meaningful conversations and calm spaces.</p>
   </section>
 
-  <section>
+  <section id="game">
     <h2>🎮 Favorite Game</h2>
-    <p><strong>In Stars and Time</strong> is a masterpiece — a turn-based RPG that blends humor, heartbreak, and time loops. It’s not just a game, it’s a journey through memory, choice, and connection. I resonate with its quiet strength and emotional depth.</p>
+    <p><strong>In Stars and Time</strong> is my favorite. It’s a turn-based RPG with humor, emotion, and time loops. It’s more than a game — it’s a story about choices, memories, and connection.</p>
   </section>
 
-  <section>
+  <section id="links">
     <h2>🔗 My Links</h2>
-    <p>Explore more of my universe through these portals:</p>
+    <p>Check out my profiles:</p>
     <div class="link-icons">
-      <!-- Roblox Link -->
       <a href="https://www.roblox.com/users/2517791964/profile" target="_blank" title="Roblox">
         <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Roblox_Logo_2022.svg" alt="Roblox">
       </a>
-
-      <!-- Discord Copy Button -->
       <button onclick="copyDiscord()" title="Copy Discord Username" style="background: none; border: none; position: relative;">
         <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/Discord_logo.svg" alt="Discord">
-        <div class="bubble" id="bubble">Successful!</div>
+        <div class="bubble" id="bubble">Copied!</div>
       </button>
     </div>
   </section>
 
-  <section>
+  <section id="final">
     <h2>🌠 Final Thoughts</h2>
-    <p>Thanks for visiting my universe. Whether you're looping through time or drifting through stars, I hope you find peace in your own orbit.</p>
+    <p>Thanks for visiting. Whether you're exploring space or just chilling, I hope you find your own kind of peace.</p>
   </section>
 
   <footer>
@@ -161,6 +170,24 @@
   </footer>
 
   <script>
+    // Scroll to section
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Discord copy
+    function copyDiscord() {
+      const discordUsername = "Wuraitro";
+      navigator.clipboard.writeText(discordUsername).then(() => {
+        const bubble = document.getElementById("bubble");
+        bubble.classList.add("show");
+        setTimeout(() => {
+          bubble.classList.remove("show");
+        }, 3000);
+      });
+    }
+
+    // Star canvas animation
     const canvas = document.getElementById('starCanvas');
     const ctx = canvas.getContext('2d');
     let stars = [];
@@ -216,10 +243,8 @@
         }
 
         this.vy += 0.01;
-
         this.x += this.vx;
         this.y += this.vy;
-
         this.vx *= 0.95;
         this.vy *= 0.98;
 
@@ -233,30 +258,4 @@
 
     function initStars() {
       stars = [];
-      for (let i = 0; i < 150; i++) {
-        stars.push(new Star());
-      }
-    }
-
-    function animateStars() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      stars.forEach(star => star.update());
-      requestAnimationFrame(animateStars);
-    }
-
-    initStars();
-    animateStars();
-
-    function copyDiscord() {
-      const discordUsername = "Wuraitro";
-      navigator.clipboard.writeText(discordUsername).then(() => {
-        const bubble = document.getElementById("bubble");
-        bubble.classList.add("show");
-        setTimeout(() => {
-          bubble.classList.remove("show");
-        }, 3000);
-      });
-    }
-  </script>
-</body>
-</html>
+      for (let i = 0; i < 150;
