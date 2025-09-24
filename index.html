@@ -12,10 +12,22 @@
       background-color: black;
       color: white;
       transition: box-shadow 0.5s ease;
+      position: relative;
+    }
+
+    body.cosmic-mode::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      box-shadow: inset 0 0 100px rgba(255, 0, 0, 0.3);
+      pointer-events: none;
+      z-index: -1;
     }
 
     body.cosmic-mode {
-      box-shadow: inset 0 0 100px rgba(255, 0, 0, 0.3);
       animation: beatZoom 1s infinite;
     }
 
@@ -118,8 +130,8 @@
     <p>Has atravesado el portal. Aquí puedes descubrir contenido oculto, ideas cósmicas o simplemente disfrutar del viaje.</p>
 
     <button onclick="activateCosmicMode('favorito1.mp3')">Favorito 1</button>
-    <button onclick="changeMusic('favorito2.mp3')">Favorito 2</button>
-    <button onclick="changeMusic('favorito3.mp3')">Favorito 3</button>
+    <button onclick="activateCosmicMode('favorito2.mp3')">Favorito 2</button>
+    <button onclick="activateCosmicMode('favorito3.mp3')">Favorito 3</button>
 
     <button onclick="fadeOutMusic(); toggleUI(); deactivateCosmicMode()">Volver</button>
   </div>
@@ -212,8 +224,9 @@
     }
 
     function fadeInMusic() {
+      audio.src = "musica.mp3";
       audio.play().catch(() => {});
-      let volume = audio.volume || 0;
+      let volume = 0;
       const interval = setInterval(() => {
         volume += 0.02;
         if (volume >= 1) {
@@ -231,18 +244,15 @@
         if (volume <= 0) {
           volume = 0;
           clearInterval(interval);
+          audio.pause();
         }
         audio.volume = volume;
       }, 50);
     }
 
-    function changeMusic(fileName) {
+    function activateCosmicMode(fileName) {
       audio.src = fileName;
       audio.play().catch(() => {});
-    }
-
-    function activateCosmicMode(fileName) {
-      changeMusic(fileName);
       document.body.classList.add('cosmic-mode');
       cosmicMode = true;
       stars.forEach(star => {
@@ -259,6 +269,8 @@
         star.glow = 0;
         star.vy = Math.random() * 1 + 0.5;
       });
+      audio.pause();
+      audio.src = "musica.mp3";
     }
   </script>
 </body>
