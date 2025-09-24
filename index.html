@@ -152,6 +152,7 @@
       <div class="planet" style="top: -120px; left: -30px; background: radial-gradient(circle, #ff69b4, #c71585);" onclick="openModal('about')"></div>
       <div class="planet" style="top: 30px; left: 120px; background: radial-gradient(circle, #32cd32, #006400);" onclick="openModal('projects')"></div>
       <div class="planet" style="top: 120px; left: -30px; background: radial-gradient(circle, #1e90ff, #00008b);" onclick="openModal('contact')"></div>
+      <div class="planet" style="top: -30px; left: -120px; background: radial-gradient(circle, #ffa500, #ff4500);" onclick="openModal('extra')"></div>
     </div>
   </div>
 
@@ -246,6 +247,9 @@
       } else if (type === 'contact') {
         title.textContent = 'Contact';
         content.textContent = 'Reach Wuraito via Discord: @Wuraito#0001 or explore the stars together!';
+      } else if (type === 'extra') {
+        title.textContent = 'Extra Planet';
+        content.textContent = 'This mysterious planet holds secrets yet to be discovered. Stay curious!';
       }
 
       modal.classList.add('active');
