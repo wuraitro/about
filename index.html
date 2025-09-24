@@ -27,25 +27,22 @@
       z-index: 1;
     }
 
-    .container.hidden {
-      transform: scale(0);
-      opacity: 0;
+    .container.wormhole {
+      animation: wormholeCollapse 1s ease forwards;
     }
 
-    .alt-ui {
-      display: none;
-      text-align: center;
-      padding: 4rem 2rem;
+    .alt-ui.wormhole {
+      animation: wormholeExpand 1s ease forwards;
     }
 
-    .alt-ui.visible {
-      display: block;
-      animation: expandUI 1s ease forwards;
+    @keyframes wormholeCollapse {
+      0% { transform: scale(1) rotate(0deg); opacity: 1; }
+      100% { transform: scale(0) rotate(720deg); opacity: 0; }
     }
 
-    @keyframes expandUI {
-      from { transform: scale(0); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+    @keyframes wormholeExpand {
+      0% { transform: scale(0) rotate(-720deg); opacity: 0; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
     }
 
     header {
@@ -78,6 +75,16 @@
     button:hover {
       transform: scale(1.05);
     }
+
+    .alt-ui {
+      display: none;
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .alt-ui.visible {
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -94,19 +101,20 @@
       <p>Soy una persona creativa, curiosa y siempre en busca de nuevas experiencias. Me encanta el diseño, la tecnología y todo lo que tenga un toque visual atractivo.</p>
     </div>
 
-    <button onclick="toggleUI()">Entrar al portal</button>
+    <button onclick="toggleUI()">Atravesar el agujero de gusano</button>
   </div>
 
   <div class="alt-ui" id="altUI">
-    <h2>🌌 Bienvenido al otro lado</h2>
-    <p>Has atravesado el portal. Aquí puedes descubrir contenido oculto, ideas cósmicas o simplemente disfrutar del viaje.</p>
-    <button onclick="toggleUI()">Volver</button>
+    <h2>🚀 Has cruzado el portal</h2>
+    <p>Bienvenido al otro lado del universo. Aquí puedes explorar ideas cósmicas y secretos estelares.</p>
+    <button onclick="toggleUI()">Volver a la realidad</button>
   </div>
 
   <script>
     const canvas = document.getElementById('stars');
     const ctx = canvas.getContext('2d');
     let stars = [];
+    let mouse = { x: null, y: null };
 
     function resizeCanvas() {
       canvas.width = window.innerWidth;
@@ -116,28 +124,58 @@
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
+    window.addEventListener('mousemove', e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
     for (let i = 0; i < 200; i++) {
       stars.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         size: Math.random() * 2,
-        speed: Math.random() * 0.5 + 0.2
+        speed: Math.random() * 0.5 + 0.2,
+        vx: 0,
+        vy: 0
       });
     }
 
     function animateStars() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = 'white';
+
       stars.forEach(star => {
+        const dx = star.x - mouse.x;
+        const dy = star.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const radius = 100;
+
+        if (dist < radius) {
+          const angle = Math.atan2(dy, dx);
+          const force = (radius - dist) / radius;
+          star.vx += Math.cos(angle) * force * 2;
+          star.vy += Math.sin(angle) * force * 2;
+        }
+
+        star.y += star.speed;
+        star.x += star.vx;
+        star.y += star.vy;
+
+        star.vx *= 0.95;
+        star.vy *= 0.95;
+
+        if (star.y > canvas.height || star.x < 0 || star.x > canvas.width) {
+          star.x = Math.random() * canvas.width;
+          star.y = 0;
+          star.vx = 0;
+          star.vy = 0;
+        }
+
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
         ctx.fill();
-        star.y += star.speed;
-        if (star.y > canvas.height) {
-          star.y = 0;
-          star.x = Math.random() * canvas.width;
-        }
       });
+
       requestAnimationFrame(animateStars);
     }
 
@@ -146,15 +184,19 @@
     function toggleUI() {
       const main = document.getElementById('mainUI');
       const alt = document.getElementById('altUI');
-      if (!main.classList.contains('hidden')) {
-        main.classList.add('hidden');
+
+      if (!main.classList.contains('wormhole')) {
+        main.classList.add('wormhole');
         setTimeout(() => {
-          alt.classList.add('visible');
+          main.style.display = 'none';
+          alt.classList.add('visible', 'wormhole');
         }, 1000);
       } else {
+        alt.classList.remove('wormhole');
         alt.classList.remove('visible');
         setTimeout(() => {
-          main.classList.remove('hidden');
+          main.style.display = 'block';
+          main.classList.remove('wormhole');
         }, 1000);
       }
     }
