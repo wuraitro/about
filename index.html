@@ -81,7 +81,6 @@
   </style>
 </head>
 <body>
-  <!-- 🎵 Música de fondo -->
   <audio src="musica.mp3" autoplay loop></audio>
 
   <canvas id="stars"></canvas>
@@ -127,14 +126,11 @@
     });
 
     for (let i = 0; i < 200; i++) {
-      const angle = Math.random() * 2 * Math.PI;
-      const speed = Math.random() * 0.5 + 0.2;
       stars.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         size: Math.random() * 2,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed
+        vy: Math.random() * 1 + 0.5 // velocidad vertical (caída)
       });
     }
 
@@ -152,24 +148,19 @@
           if (distance < repelRadius) {
             const angle = Math.atan2(dy, dx);
             const force = (repelRadius - distance) / repelRadius;
-            star.vx += Math.cos(angle) * force * 0.5;
-            star.vy += Math.sin(angle) * force * 0.5;
+            star.x += Math.cos(angle) * force * 5;
+            star.y += Math.sin(angle) * force * 5;
           }
         }
 
-        // Movimiento
-        star.x += star.vx;
+        // Caída
         star.y += star.vy;
 
-        // Fricción cósmica
-        star.vx *= 0.98;
-        star.vy *= 0.98;
-
-        // Teletransportación espacial
-        if (star.x < 0) star.x = canvas.width;
-        if (star.x > canvas.width) star.x = 0;
-        if (star.y < 0) star.y = canvas.height;
-        if (star.y > canvas.height) star.y = 0;
+        // Reinicio desde arriba si cae fuera
+        if (star.y > canvas.height) {
+          star.y = 0;
+          star.x = Math.random() * canvas.width;
+        }
 
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
