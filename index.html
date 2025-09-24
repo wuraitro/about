@@ -118,39 +118,22 @@
     </header>
 
     <div class="card">
-      <h2>About Me</h2>
-      <p>Hey there! I'm a curious soul who loves exploring new ideas and making things look awesome. I'm into design, tech, and anything that sparks creativity. If it glows, moves, or makes you say “whoa!”, I’m probably into it.</p>
-    </div>
-
-    <div class="card">
-      <h2>🎬 Series I Love</h2>
-      <p>These shows keep me hooked—whether it's action, mystery, or pure chaos, I'm all in.</p>
-      <button onclick="activateCosmicMode('murderdrones.mp3')">🕷 Murder Drones</button>
-      <button onclick="activateCosmicMode('bluelock.mp3')">⚽ Blue Lock</button>
-      <button onclick="activateCosmicMode('onepunchman.mp3')">👊 One Punch Man</button>
-    </div>
-
-    <div class="card">
-      <h2>🎮 Indie Games I’m Obsessed With</h2>
-      <p>These games hit different. Deep stories, wild mechanics, and unforgettable vibes.</p>
-      <button onclick="activateCosmicMode('deltarune.mp3')">💫 Deltarune</button>
-      <button onclick="activateCosmicMode('slaythespire.mp3')">🗡 Slay the Spire</button>
-      <button onclick="activateCosmicMode('instarsandtime.mp3')">⏳ In Stars and Time</button>
-      <button onclick="activateCosmicMode('undertale.mp3')">❤️ Undertale</button>
+      <h2>Sobre mí</h2>
+      <p>Soy una persona creativa, curiosa y siempre en busca de nuevas experiencias. Me encanta el diseño, la tecnología y todo lo que tenga un toque visual atractivo.</p>
     </div>
 
     <button onclick="fadeInMusic(); toggleUI()">Entrar al portal</button>
   </div>
 
   <div class="alt-ui" id="altUI">
-    <h2>🌌 Welcome to the other side</h2>
-    <p>You’ve crossed the portal. Here you can discover hidden content, cosmic ideas, or just enjoy the ride.</p>
+    <h2>🌌 Bienvenido al otro lado</h2>
+    <p>Has atravesado el portal. Aquí puedes descubrir contenido oculto, ideas cósmicas o simplemente disfrutar del viaje.</p>
 
-    <button onclick="activateCosmicMode('favorito1.mp3')">Favorite 1</button>
-    <button onclick="activateCosmicMode('favorito2.mp3')">Favorite 2</button>
-    <button onclick="activateCosmicMode('favorito3.mp3')">Favorite 3</button>
+    <button onclick="activateCosmicMode('favorito1.mp3')">Favorito 1</button>
+    <button onclick="activateCosmicMode('favorito2.mp3')">Favorito 2</button>
+    <button onclick="activateCosmicMode('favorito3.mp3')">Favorito 3</button>
 
-    <button onclick="fadeOutMusic(); toggleUI(); deactivateCosmicMode()">Go Back</button>
+    <button onclick="fadeOutMusic(); toggleUI(); deactivateCosmicMode()">Volver</button>
   </div>
 
   <script>
@@ -256,4 +239,39 @@
 
     function fadeOutMusic() {
       let volume = audio.volume || 1;
-      const interval = set
+      const interval = setInterval(() => {
+        volume -= 0.02;
+        if (volume <= 0) {
+          volume = 0;
+          clearInterval(interval);
+          audio.pause();
+        }
+        audio.volume = volume;
+      }, 50);
+    }
+
+    function activateCosmicMode(fileName) {
+      audio.src = fileName;
+      audio.play().catch(() => {});
+      document.body.classList.add('cosmic-mode');
+      cosmicMode = true;
+      stars.forEach(star => {
+        star.color = 'red';
+        star.glow = 10;
+      });
+    }
+
+    function deactivateCosmicMode() {
+      document.body.classList.remove('cosmic-mode');
+      cosmicMode = false;
+      stars.forEach(star => {
+        star.color = 'white';
+        star.glow = 0;
+        star.vy = Math.random() * 1 + 0.5;
+      });
+      audio.pause();
+      audio.src = "musica.mp3";
+    }
+  </script>
+</body>
+</html>
