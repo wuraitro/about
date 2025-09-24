@@ -36,6 +36,10 @@
       display: none;
       text-align: center;
       padding: 4rem 2rem;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
 
     .alt-ui.visible {
@@ -44,8 +48,8 @@
     }
 
     @keyframes expandUI {
-      from { transform: scale(0); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+      from { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     }
 
     header {
@@ -103,7 +107,6 @@
     <h2>🌌 Bienvenido al otro lado</h2>
     <p>Has atravesado el portal. Aquí puedes descubrir contenido oculto, ideas cósmicas o simplemente disfrutar del viaje.</p>
 
-    <!-- 🎶 Botones para cambiar la música -->
     <button onclick="changeMusic('favorito1.mp3')">Favorito 1</button>
     <button onclick="changeMusic('favorito2.mp3')">Favorito 2</button>
     <button onclick="changeMusic('favorito3.mp3')">Favorito 3</button>
