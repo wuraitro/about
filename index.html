@@ -81,8 +81,8 @@
   </style>
 </head>
 <body>
-  <!-- 🎵 Música de fondo desde GitHub -->
-  <audio src="https://github.com/wuraitro/about/raw/refs/heads/main/musica.mp3" autoplay loop></audio>
+  <!-- 🎵 Música de fondo (se inicia con interacción) -->
+  <audio id="bgMusic" src="musica.mp3" loop></audio>
 
   <canvas id="stars"></canvas>
 
@@ -97,7 +97,7 @@
       <p>Soy una persona creativa, curiosa y siempre en busca de nuevas experiencias. Me encanta el diseño, la tecnología y todo lo que tenga un toque visual atractivo.</p>
     </div>
 
-    <button onclick="toggleUI()">Entrar al portal</button>
+    <button onclick="startMusic(); toggleUI()">Entrar al portal</button>
   </div>
 
   <div class="alt-ui" id="altUI">
@@ -187,6 +187,13 @@
           main.classList.remove('hidden');
         }, 1000);
       }
+    }
+
+    function startMusic() {
+      const audio = document.getElementById('bgMusic');
+      audio.play().catch(e => {
+        console.log("El navegador bloqueó el autoplay. Se necesita interacción.");
+      });
     }
   </script>
 </body>
