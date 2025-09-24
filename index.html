@@ -13,6 +13,41 @@
       overflow-x: hidden;
     }
 
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .button-bar {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      z-index: 100;
+    }
+
+    .btn {
+      background: linear-gradient(145deg, #9d4edd, #7b2cbf);
+      color: #fff;
+      padding: 14px 28px;
+      font-size: 1em;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 8px 20px rgba(123, 44, 191, 0.3);
+      transform-style: preserve-3d;
+    }
+
+    .btn:hover {
+      transform: rotateX(8deg) rotateY(-8deg) scale(1.05);
+      box-shadow: 0 12px 25px rgba(123, 44, 191, 0.5);
+    }
+
     header {
       text-align: center;
       padding: 100px 20px 40px;
@@ -52,13 +87,6 @@
       font-size: 0.9em;
       color: #ccc;
       background-color: #0d1b2a;
-    }
-
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: -1;
     }
 
     .link-icons {
@@ -108,35 +136,6 @@
     @keyframes slideUp {
       from { opacity: 0; transform: translateY(40px); }
       to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Purplish 3D Buttons */
-    .button-bar {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 20px;
-      z-index: 10;
-    }
-
-    .btn {
-      background: linear-gradient(145deg, #7b2cbf, #5a189a);
-      color: #fff;
-      padding: 14px 28px;
-      font-size: 1em;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      box-shadow: 0 8px 20px rgba(123, 44, 191, 0.3);
-      transform-style: preserve-3d;
-    }
-
-    .btn:hover {
-      transform: rotateX(8deg) rotateY(-8deg) scale(1.05);
-      box-shadow: 0 12px 25px rgba(123, 44, 191, 0.5);
     }
   </style>
 </head>
@@ -243,4 +242,5 @@
         if (distance < repulsionRadius) {
           const angle = Math.atan2(distY, distX);
           const force = (repulsionRadius - distance) / repulsionRadius;
-          this.v
+          this.vx += Math.cos(angle) * force * 0.3;
+          this.vy += Math.sin(angle) * force * 0.3
