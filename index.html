@@ -132,6 +132,64 @@
       font-size: 2em;
       color: #fff;
     }
+
+    /* Sound bar styles */
+    .sound-bar {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      background: rgba(30, 30, 50, 0.7);
+      padding: 10px 20px;
+      border-radius: 30px;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+      z-index: 20;
+    }
+
+    .sound-icon {
+      margin-right: 10px;
+      font-size: 24px;
+    }
+
+    .volume-slider {
+      width: 200px;
+      height: 6px;
+      -webkit-appearance: none;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+      outline: none;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #ffd700;
+      cursor: pointer;
+      box-shadow: 0 0 5px #ffd700;
+    }
+
+    .star-visualizer {
+      width: 30px;
+      height: 30px;
+      margin-left: 15px;
+      position: relative;
+      transform-origin: center;
+      transition: transform 0.1s ease;
+    }
+
+    .star-visualizer::before {
+      content: "★";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      color: #ffd700;
+    }
   </style>
 </head>
 <body>
@@ -162,6 +220,13 @@
      The night sky inspires me to stay curious and humble. Like planets, I follow my own path but respect others’. We’re all stardust, and that thought keeps me grounded.
     </p>
     <button class="close-btn" onclick="closeModal()">Close</button>
+  </div>
+
+  <!-- Sound bar with rotating star -->
+  <div class="sound-bar">
+    <div class="sound-icon">🔊</div>
+    <input type="range" min="0" max="100" value="50" class="volume-slider" id="volume-slider">
+    <div class="star-visualizer" id="star-visualizer"></div>
   </div>
 
   <script>
@@ -263,6 +328,20 @@
       document.getElementById('overlay').style.display = 'none';
       document.getElementById('bg-music').play();
     }
+
+    // Sound bar functionality
+    const volumeSlider = document.getElementById('volume-slider');
+    const starVisualizer = document.getElementById('star-visualizer');
+    const bgMusic = document.getElementById('bg-music');
+
+    volumeSlider.addEventListener('input', function() {
+      const volume = this.value / 100;
+      bgMusic.volume = volume;
+      
+      // Rotate star based on volume
+      const rotation = volume * 360;
+      starVisualizer.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+    });
   </script>
 </body>
 </html>
