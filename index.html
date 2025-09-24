@@ -7,7 +7,8 @@
   <style>
     body {
       margin: 0;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
       font-family: 'Montserrat', sans-serif;
       background-color: black;
       color: white;
@@ -59,10 +60,7 @@
       display: none;
       text-align: center;
       padding: 4rem 2rem;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      position: relative;
     }
 
     .alt-ui.visible {
@@ -71,8 +69,8 @@
     }
 
     @keyframes expandUI {
-      from { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
 
     header {
@@ -105,6 +103,10 @@
     button:hover {
       transform: scale(1.05);
     }
+
+    html {
+      scroll-behavior: smooth;
+    }
   </style>
 </head>
 <body>
@@ -120,6 +122,26 @@
     <div class="card">
       <h2>Sobre mí</h2>
       <p>Soy una persona creativa, curiosa y siempre en busca de nuevas experiencias. Me encanta el diseño, la tecnología y todo lo que tenga un toque visual atractivo.</p>
+    </div>
+
+    <div class="card">
+      <h2>Mi historia</h2>
+      <p>Desde pequeño me ha fascinado el arte digital y la forma en que podemos crear mundos con solo imaginación y código. Estudié diseño gráfico y desarrollo web, y ahora combino ambas pasiones para crear experiencias únicas.</p>
+    </div>
+
+    <div class="card">
+      <h2>Mis pasiones</h2>
+      <ul>
+        <li>🎨 Diseño visual y branding</li>
+        <li>💻 Desarrollo web y animaciones interactivas</li>
+        <li>📷 Fotografía artística</li>
+        <li>🎶 Música electrónica y ambient</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Contacto</h2>
+      <p>¿Te gustaría colaborar o simplemente charlar? Puedes escribirme a <strong>tunombre@email.com</strong> o encontrarme en redes sociales.</p>
     </div>
 
     <button onclick="fadeInMusic(); toggleUI()">Entrar al portal</button>
@@ -257,21 +279,3 @@
       cosmicMode = true;
       stars.forEach(star => {
         star.color = 'red';
-        star.glow = 10;
-      });
-    }
-
-    function deactivateCosmicMode() {
-      document.body.classList.remove('cosmic-mode');
-      cosmicMode = false;
-      stars.forEach(star => {
-        star.color = 'white';
-        star.glow = 0;
-        star.vy = Math.random() * 1 + 0.5;
-      });
-      audio.pause();
-      audio.src = "musica.mp3";
-    }
-  </script>
-</body>
-</html>
