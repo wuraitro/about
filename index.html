@@ -3,12 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Nova" />
+  <meta name="description" content="Nova – a personal space for creativity, code, and reviews." />
   <title>Nova</title>
   <style>
     :root {
-      --bg-deep: #1e0f3a;
-      --bg-mid: #1e0f3a;
       --bg-top: #1e0f3a;
 
       --accent-1: #a855f7;
@@ -189,24 +187,14 @@
       text-shadow: 0 0 10px rgba(249,168,38,0.25); font-weight: 800;
     }
 
-    /* Music grid */
-    .music-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; padding: 0; list-style: none; margin: 0;
-    }
-    .music-card {
-      background: rgba(255,255,255,0.04); border: 1px solid rgba(168,85,247,0.22);
-      border-radius: 12px; overflow: hidden; box-shadow: 0 6px 22px rgba(124,58,237,0.15);
-    }
+    .music-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; padding: 0; list-style: none; margin: 0; }
+    .music-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(168,85,247,0.22); border-radius: 12px; overflow: hidden; box-shadow: 0 6px 22px rgba(124,58,237,0.15); }
     .music-cover-wrap { width: 100%; height: 220px; background: rgba(0,0,0,0.2); display: grid; place-items: center; }
-    .music-cover {
-      width: 100%; height: 100%; object-fit: cover;
-    }
+    .music-cover { width: 100%; height: 100%; object-fit: cover; }
     .music-meta { padding: 12px 12px 10px; }
     .music-title { margin: 0 0 6px; color: #efe7ff; }
     .music-credits { font-size: 0.85rem; color: rgba(255,255,255,0.7); margin: 0 0 10px; }
-    .music-controls {
-      display: flex; align-items: center; gap: 10px; padding: 0 12px 12px;
-    }
+    .music-controls { display: flex; align-items: center; gap: 10px; padding: 0 12px 12px; }
     .play-btn {
       appearance: none; border: 0; width: 38px; height: 38px; border-radius: 50%;
       background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05));
@@ -214,15 +202,9 @@
       color: var(--text-strong); cursor: pointer; font-weight: 800;
     }
     .time { font-variant-numeric: tabular-nums; font-size: 0.9rem; color: rgba(255,255,255,0.85); min-width: 112px; }
-    .bar {
-      position: relative; flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 6px; cursor: pointer; overflow: hidden;
-    }
-    .bar-fill {
-      position: absolute; left: 0; top: 0; bottom: 0; width: 0%;
-      background: linear-gradient(90deg, #c084fc, #7c3aed); box-shadow: 0 0 14px rgba(168,85,247,0.4) inset;
-    }
+    .bar { position: relative; flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 6px; cursor: pointer; overflow: hidden; }
+    .bar-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0%; background: linear-gradient(90deg, #c084fc, #7c3aed); box-shadow: 0 0 14px rgba(168,85,247,0.4) inset; }
 
-    /* Discord toast */
     .toast {
       position: fixed; right: 20px; bottom: 24px; background: var(--success); color: #06251a;
       padding: 10px 14px; border-radius: 10px; box-shadow: 0 12px 30px rgba(16,185,129,0.35);
@@ -247,6 +229,11 @@
     section .reveal:nth-child(4) { transition-delay: 240ms; }
     section .reveal:nth-child(5) { transition-delay: 300ms; }
 
+    a { color: #c7b7ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .contact-list { list-style: none; padding-left: 0; margin: 10px 0 0; }
+    .contact-list li { margin: 8px 0; }
+    
     @media (max-width: 600px) {
       header { font-size: 2.2em; }
       .nav { gap: 10px; }
@@ -292,38 +279,18 @@
   </nav>
 
   <main>
-  <section id="bio" role="tabpanel" aria-labelledby="bio-tab">
-    <h2 class="reveal"><span class="rgb">About Me</span></h2>
-    
-    <div class="about-paragraph reveal">
-      I’m <span class="rgb underline-glow"><b>16</b></span>.  
-      I like <span class="shiny-text"><b>learning things</b></span> and keeping my circle  
-      <span class="glow"><b>small</b></span>.  
-      I’m mostly <span class="rgb"><b>introverted</b></span>, but it depends on the  
-      <span class="glow"><b>room</b></span> and the <span class="glow"><b>people</b></span>.  
-      I’m wary of <span class="underline-glow"><b>shortcuts</b></span> that promise everything  
-      but deliver very little.
-    </div>
-
-    <div class="about-paragraph reveal">
-      I don’t chase <span class="rgb"><b>trends</b></span>; I chase  
-      <span class="shiny-text"><b>progress</b></span>.  
-      <span class="underline-glow"><b>Honest feedback</b></span> >  
-      <span class="rgb"><b>empty praise</b></span>,  
-      and <span class="glow"><b>consistency</b></span> > <span class="rgb"><b>hype</b></span>.  
-      If you’re cool with a <span class="shiny-text"><b>serious tone</b></span> and the occasional  
-      <span class="rgb"><b>dry joke</b></span>, we’ll get along.  
-      I may be <span class="rgb"><b>quiet</b></span> at first, but it depends on the  
-      <span class="glow"><b>context</b></span> and <span class="glow"><b>vibe</b></span>.
-    </div>
-
-    <div class="about-paragraph reveal">
-      Please don’t add me if  
-      <span class="rgb underline-glow"><b>favoritism</b></span> is your thing.
-    </div>
-  </section>
-</main>
-
+    <section id="bio" role="tabpanel" aria-labelledby="bio-tab">
+      <h2 class="reveal">About Me</h2>
+      <div class="about-paragraph reveal">
+        I’m <span class="rgb underline-glow">16</span>. I like <span class="shiny-text">building things</span>, learning at my own pace, and keeping my circle small. I’m mostly introverted, but it depends on the room and the people in it. I prefer <span class="glow">steady effort</span> over loud declarations, and I’m wary of <span class="underline-glow">shortcuts</span> that promise everything and deliver very little.
+      </div>
+      <div class="about-paragraph reveal">
+        I don’t chase trends; I chase <span class="shiny-text">progress</span>. <span class="underline-glow">Honest feedback</span> beats empty praise, and <span class="glow">consistency</span> beats hype. If you like a serious tone with the occasional dry joke, we’ll get along. Mostly introverted as my behavior indicates, but it depends on context and social disposition.
+      </div>
+      <div class="about-paragraph reveal">
+        Please don’t add me if <span class="rgb underline-glow">favoritism</span> is your thing.
+      </div>
+    </section>
 
     <section id="games" role="tabpanel" aria-labelledby="games-tab">
       <h2 class="reveal">Game Reviews</h2>
@@ -336,7 +303,7 @@
           </div>
           <div class="game-more" id="more-celeste">
             <p><span class="stars">★★★★★</span> (5/5)</p>
-            <p>My favorite platformer right now. It actually made me want to 100% it — which is unusual for me — because every challenge feels earned, fair, and just addictive enough.</p>
+            <p>My favorite platformer right now. It actually made me want to 100% it — which is unusual for me — because every challenge feels earned, fair, and just addictive enough. Clean design, sharp controls, and a difficulty curve that teaches without preaching.</p>
           </div>
         </li>
         <li class="game-item reveal" id="game-sts">
@@ -346,7 +313,7 @@
           </div>
           <div class="game-more" id="more-sts">
             <p><span class="stars">★★★★★</span> (5/5)</p>
-            <p>Also a favorite. It’s dangerously addictive and endlessly replayable — I can run it over and over without getting bored.</p>
+            <p>Also a favorite. It’s dangerously addictive and endlessly replayable — I can run it over and over without getting bored. The strategy depth sneaks up on you, and suddenly you’re planning routes in your sleep.</p>
           </div>
         </li>
       </ul>
@@ -354,7 +321,7 @@
 
     <section id="music" role="tabpanel" aria-labelledby="music-tab">
       <h2 class="reveal">Music</h2>
-      <p class="reveal">Listen to my favorite music.</p>
+      <p class="reveal">Click play to listen. Only one track plays at a time.</p>
       <ul class="music-grid">
         <li class="music-card reveal">
           <div class="music-cover-wrap">
@@ -401,7 +368,7 @@
             <img class="music-cover" alt="Cover art for Musica3" src="https://upload.wikimedia.org/wikipedia/en/b/b6/Prince_Soft%26Wet.jpg" />
           </div>
           <div class="music-meta">
-            <h3 class="music-title">Love Train</h3>
+            <h3 class="music-title">Musica3.mp3</h3>
             <p class="music-credits">
               Artwork source:
               <a href="https://upload.wikimedia.org/wikipedia/en/b/b6/Prince_Soft%26Wet.jpg" target="_blank" rel="noopener">Wikimedia</a>
@@ -417,15 +384,18 @@
         </li>
       </ul>
       <p class="reveal" style="margin-top:12px;font-size:0.9rem;color:rgba(255,255,255,0.7);">
-        <code>Love Train</code>, <code>Wonder of U</code>, and <code>Soft and Wet<code>.
+        Audio files should be placed alongside this page as <code>Musica1.mp3</code>, <code>Musica2.mp3</code>, and <code>Musica3.mp3</code>.
       </p>
     </section>
 
     <section id="contact" role="tabpanel" aria-labelledby="contact-tab">
       <h2 class="reveal">Contact</h2>
       <p class="reveal">Reach out if you’ve got something to share.</p>
-      <p class="reveal">Email: <a href="mailto:adrbalrus@proton.me">adrbalrus@proton.me</a></p>
-      <p class="reveal">Discord: <button id="discord-btn" class="mini-button" type="button" data-username="wuraitro">Copy Username</button></p>
+      <ul class="contact-list">
+        <li class="reveal">Email: <a href="mailto:adrbalrus@proton.me">adrbalrus@proton.me</a></li>
+        <li class="reveal">Discord: <button id="discord-btn" class="mini-button" type="button" data-username="wuraitro">Copy Username</button></li>
+        <li class="reveal">Roblox: <a href="https://www.roblox.com/users/2517791964/profile" target="_blank" rel="noopener">roblox.com/users/2517791964/profile</a></li>
+      </ul>
     </section>
   </main>
 
@@ -556,7 +526,7 @@
 
     /* Music player logic */
     const controls = Array.from(document.querySelectorAll('.music-controls'));
-    const audios = new Map(); // key: src, value: HTMLAudioElement
+    const audios = new Map();
     let currentAudio = null;
     let currentUI = null;
 
@@ -630,7 +600,7 @@
 
       bar.addEventListener('keydown', (e) => {
         if (!Number.isFinite(audio.duration)) return;
-        const step = audio.duration * 0.02; // 2% per key
+        const step = audio.duration * 0.02;
         if (e.key === 'ArrowLeft') { audio.currentTime = Math.max(0, audio.currentTime - step); e.preventDefault(); }
         if (e.key === 'ArrowRight') { audio.currentTime = Math.min(audio.duration, audio.currentTime + step); e.preventDefault(); }
         if (e.key === 'Enter' || e.key === ' ') { btn.click(); e.preventDefault(); }
