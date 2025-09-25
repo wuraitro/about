@@ -1,735 +1,793 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Nova – a personal space for creativity, code, and reviews." />
-  <title>Nova</title>
-  <style>
-    :root {
-      --bg-top: #1e0f3a;
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Constellation Journey - About Me</title>
+	<style>
+		* { margin: 0; padding: 0; box-sizing: border-box; }
 
-      --accent-1: #a855f7;
-      --accent-2: #7c3aed;
-      --accent-3: #c084fc;
-      --accent-4: #8b5cf6;
-      --accent-5: #06b6d4;
+		body {
+			font-family: 'Arial', sans-serif;
+			background: radial-gradient(ellipse at center, #1a0a2e 0%, #0f0f23 50%, #000000 100%);
+			color: #ffffff;
+			overflow-x: hidden;
+			min-height: 100vh;
+			position: relative;
+		}
 
-      --text-strong: #ffffff;
-      --text: rgba(255,255,255,0.92);
-      --muted: rgba(255,255,255,0.72);
+		/* Main Menu Overlay */
+		.main-menu {
+			position: fixed;
+			inset: 0;
+			z-index: 9999;
+			background: radial-gradient(ellipse at center, #1a0a2e 0%, #0f0f23 50%, #000000 100%);
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			opacity: 1;
+			transition: opacity 1.5s ease, transform 1.5s ease;
+		}
 
-      --panel: rgba(255,255,255,0.06);
-      --panel-strong: rgba(19,10,38,0.72);
-      --panel-border: rgba(168,85,247,0.28);
+		.main-menu.hidden {
+			opacity: 0;
+			transform: scale(0.8);
+			pointer-events: none;
+		}
 
-      --glow-weak: 0 0 20px rgba(168,85,247,0.25);
-      --glow: 0 0 28px rgba(168,85,247,0.35), 0 0 60px rgba(124,58,237,0.28);
-      --ring: 0 0 0 1px rgba(168,85,247,0.45);
-      --success: #10b981;
-    }
+		/* Menu Stars */
+		.menu-stars {
+			position: absolute;
+			inset: 0;
+			pointer-events: none;
+		}
 
-    html, body { height: 100%; }
+		.menu-star {
+			position: absolute;
+			background: #ffffff;
+			border-radius: 50%;
+			animation: menuTwinkle 4s infinite;
+		}
 
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif;
-      color: var(--text);
-      background-color: var(--bg-top);
-      overflow-x: hidden;
-      transition: background 0.8s ease;
-    }
+		.menu-star:nth-child(odd) { animation-delay: 1s; }
+		.menu-star:nth-child(3n) { animation-delay: 2s; }
+		.menu-star:nth-child(5n) { animation-delay: 3s; }
 
-    .header-wrap { position: relative; padding-top: 36px; }
-    .header-wrap::before { content: none; }
+		@keyframes menuTwinkle {
+			0%, 100% { opacity: 0.2; transform: scale(1); }
+			50% { opacity: 1; transform: scale(1.3); }
+		}
 
-    header {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: 54px 20px 12px;
-      font-size: 3.2em;
-      letter-spacing: 0.16em;
-      line-height: 1.05;
-      background: linear-gradient(90deg, #f5e9ff, #c084fc, #a855f7, #7c3aed, #c084fc);
-      background-size: 220% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      -webkit-text-stroke: 1px rgba(255,255,255,0.28);
-      text-shadow: 0 2px 24px rgba(168,85,247,0.45), 0 0 2px rgba(0,0,0,0.3);
-      animation: titleShift 8s linear infinite;
-      margin: 0;
-    }
-    header::after {
-      content: attr(data-title);
-      position: absolute; inset: 0; display: block; color: transparent;
-      -webkit-text-stroke: 2px rgba(0,0,0,0.6); text-shadow: none; pointer-events: none; mix-blend-mode: multiply;
-    }
-    @keyframes titleShift { 0% { background-position: 0% center; } 100% { background-position: 220% center; } }
+		/* Menu Content */
+		.menu-content {
+			text-align: center;
+			opacity: 0;
+			transform: translateY(50px);
+			animation: menuFadeIn 2s ease 0.5s forwards;
+		}
 
-    nav { text-align: center; margin: 22px 0 8px; }
-    .nav { display: inline-flex; gap: 14px; flex-wrap: wrap; align-items: center; justify-content: center; }
+		@keyframes menuFadeIn {
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
 
-    .nav-button {
-      position: relative; appearance: none; border: 0; padding: 14px 26px; border-radius: 36px;
-      color: var(--text-strong); font-size: 1rem; letter-spacing: 0.02em; cursor: pointer;
-      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 8px 24px rgba(124,58,237,0.22), var(--ring);
-      transition: transform 0.18s ease, box-shadow 0.3s ease, background 0.3s ease;
-      overflow: hidden; isolation: isolate;
-    }
-    .nav-button::before {
-      content: ""; position: absolute; inset: -2px; border-radius: 40px;
-      background: conic-gradient(from 180deg, var(--accent-3), var(--accent-1), var(--accent-2), var(--accent-4), var(--accent-3));
-      filter: blur(8px); opacity: 0.85; z-index: -1; animation: spin 5s linear infinite;
-    }
-    .nav-button::after {
-      content: ""; position: absolute; inset: 2px; border-radius: 34px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05)); pointer-events: none;
-    }
-    .nav-button .shimmer {
-      position: absolute; inset: 0; border-radius: 34px;
-      background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.22) 34%, transparent 64%);
-      transform: translateX(-120%); transition: transform 0.7s ease; mix-blend-mode: screen;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .nav-button:hover {
-      transform: translateY(-2px);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 10px 28px rgba(168,85,247,0.38), 0 0 0 1px rgba(168,85,247,0.55);
-    }
-    .nav-button:hover .shimmer { transform: translateX(130%); }
-    .nav-button:active {
-      transform: translateY(0px) scale(0.99);
-      box-shadow: inset 0 2px 12px rgba(0,0,0,0.35), 0 4px 16px rgba(124,58,237,0.28), 0 0 0 1px rgba(168,85,247,0.65);
-    }
+		.menu-title {
+			font-size: 4rem;
+			background: linear-gradient(45deg, #8b5cf6, #a855f7, #c084fc, #8b5cf6);
+			background-size: 300% 300%;
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+			margin-bottom: 1rem;
+			animation: titleGlow 3s ease-in-out infinite;
+			text-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+		}
 
-    .ripple {
-      position: absolute; border-radius: 999px;
-      background: radial-gradient(circle, rgba(192,132,252,0.38) 0%, rgba(192,132,252,0.2) 45%, transparent 60%);
-      transform: translate(-50%, -50%); pointer-events: none; width: 12px; height: 12px;
-      animation: ripple 600ms ease-out forwards; filter: blur(0.5px);
-    }
-    @keyframes ripple {
-      0% { opacity: 0.85; transform: translate(-50%, -50%) scale(0.15); }
-      80% { opacity: 0.25; }
-      100% { opacity: 0; transform: translate(-50%, -50%) scale(12); }
-    }
+		@keyframes titleGlow {
+			0%, 100% { 
+				background-position: 0% 50%;
+				filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.3));
+			}
+			50% { 
+				background-position: 100% 50%;
+				filter: drop-shadow(0 0 40px rgba(139, 92, 246, 0.6));
+			}
+		}
 
-    main { padding: 0 16px 60px; }
+		.menu-subtitle {
+			font-size: 1.5rem;
+			color: #c084fc;
+			margin-bottom: 3rem;
+			opacity: 0;
+			animation: menuFadeIn 2s ease 1s forwards;
+		}
 
-    section {
-      max-width: 860px; margin: 30px auto; padding: 20px 22px;
-      background: linear-gradient(180deg, var(--panel-strong), var(--panel));
-      border-radius: 12px; border: 1px solid var(--panel-border); box-shadow: var(--glow);
-      opacity: 1; transform: none; transition: opacity 0.5s ease, transform 0.5s ease;
-      pointer-events: auto; backdrop-filter: blur(8px);
-    }
+		/* Music Toggle Button */
+		.music-toggle {
+			position: relative;
+			appearance: none;
+			border: 0;
+			padding: 1rem 2rem;
+			border-radius: 50px;
+			background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(168, 85, 247, 0.2));
+			border: 2px solid rgba(139, 92, 246, 0.5);
+			color: #ffffff;
+			font-size: 1.2rem;
+			font-weight: 700;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			backdrop-filter: blur(10px);
+			overflow: hidden;
+			opacity: 0;
+			animation: menuFadeIn 2s ease 1.5s forwards;
+		}
 
-    h2 { margin: 4px 0 12px; font-weight: 700; letter-spacing: 0.02em; color: #efe7ff; text-shadow: 0 2px 14px rgba(168,85,247,0.28); }
-    p, li, .about-paragraph { color: var(--muted); line-height: 1.7; }
-    ul { padding-left: 20px; }
+		.music-toggle::before {
+			content: '';
+			position: absolute;
+			inset: -2px;
+			border-radius: 52px;
+			background: conic-gradient(from 0deg, #8b5cf6, #a855f7, #c084fc, #8b5cf6);
+			z-index: -1;
+			animation: rotate 3s linear infinite;
+		}
 
-    .rgb {
-      background: linear-gradient(90deg, #ff3c3c, #ffd64a, #29ff8e, #28c6ff, #8a2be2, #ff3c3c);
-      background-size: 300% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      animation: rgbShift 6s linear infinite; font-weight: 800; letter-spacing: 0.01em;
-    }
-    @keyframes rgbShift { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
+		@keyframes rotate {
+			to { transform: rotate(360deg); }
+		}
 
-    .shiny-text {
-      background: linear-gradient(90deg, rgba(255,255,255,0.95), #c084fc 30%, #a855f7 55%, #7c3aed 75%, rgba(255,255,255,0.95));
-      background-size: 220% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      animation: shineSweep 3.2s ease-in-out infinite; font-weight: 800;
-    }
-    @keyframes shineSweep { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+		.music-toggle:hover {
+			transform: translateY(-3px) scale(1.05);
+			box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+			background: linear-gradient(135deg, rgba(139, 92, 246, 0.4), rgba(168, 85, 247, 0.3));
+		}
 
-    .glow { color: #efe7ff; text-shadow: 0 0 8px rgba(168,85,247,0.55), 0 0 18px rgba(124,58,237,0.45), 0 0 32px rgba(192,132,252,0.35); font-weight: 800; }
-    .underline-glow { position: relative; display: inline-block; }
-    .underline-glow::after {
-      content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 8px;
-      background: radial-gradient(10px 6px at 20% 50%, rgba(192,132,252,0.7), transparent 70%),
-                  radial-gradient(10px 6px at 50% 50%, rgba(168,85,247,0.7), transparent 70%),
-                  radial-gradient(10px 6px at 80% 50%, rgba(124,58,237,0.7), transparent 70%);
-      filter: blur(4px); opacity: 0.9; pointer-events: none;
-    }
+		.music-toggle:active {
+			transform: translateY(-1px) scale(1.02);
+		}
 
-    .mini-button {
-      appearance: none; border: 0; padding: 10px 16px; border-radius: 22px; color: var(--text-strong);
-      font-size: 0.95rem; cursor: pointer;
-      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 6px 18px rgba(124,58,237,0.22), var(--ring);
-      transition: transform 0.16s ease, box-shadow 0.3s ease, background 0.3s ease;
-    }
-    .mini-button:hover {
-      transform: translateY(-1px);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 10px 24px rgba(168,85,247,0.38), 0 0 0 1px rgba(168,85,247,0.55);
-    }
-    .mini-button:active {
-      transform: translateY(0);
-      box-shadow: inset 0 2px 10px rgba(0,0,0,0.35), 0 4px 16px rgba(124,58,237,0.28), 0 0 0 1px rgba(168,85,247,0.65);
-    }
+		.music-icon {
+			margin-right: 0.5rem;
+			display: inline-block;
+			transition: transform 0.3s ease;
+		}
 
-    .game-list { list-style: none; padding-left: 0; margin: 0; }
-    .game-item {
-      background: rgba(255,255,255,0.04); border: 1px solid rgba(168,85,247,0.22);
-      border-radius: 10px; padding: 14px 14px 10px; margin: 12px 0; box-shadow: 0 6px 22px rgba(124,58,237,0.15);
-    }
-    .game-actions { margin-top: 10px; }
-    .game-more {
-      overflow: hidden; max-height: 0; opacity: 0; transition: max-height 350ms ease, opacity 350ms ease;
-      margin-top: 8px; border-top: 1px dashed rgba(168,85,247,0.3); padding-top: 8px;
-    }
-    .game-more.open { max-height: 320px; opacity: 1; }
-    .stars {
-      font-size: 1rem; letter-spacing: 2px; display: inline-block;
-      background: linear-gradient(90deg, #ffd166, #f9a826);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 10px rgba(249,168,38,0.25); font-weight: 800;
-    }
+		.music-toggle:hover .music-icon {
+			transform: scale(1.2);
+		}
 
-    .music-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; padding: 0; list-style: none; margin: 0; }
-    .music-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(168,85,247,0.22); border-radius: 12px; overflow: hidden; box-shadow: 0 6px 22px rgba(124,58,237,0.15); }
-    .music-cover-wrap { width: 100%; height: 220px; background: rgba(0,0,0,0.2); display: grid; place-items: center; }
-    .music-cover { width: 100%; height: 100%; object-fit: cover; }
-    .music-meta { padding: 12px 12px 10px; }
-    .music-title { margin: 0 0 6px; color: #efe7ff; }
-    .music-credits { font-size: 0.85rem; color: rgba(255,255,255,0.7); margin: 0 0 10px; }
-    .music-controls { display: flex; align-items: center; gap: 10px; padding: 0 12px 12px; }
-    .play-btn {
-      appearance: none; border: 0; width: 38px; height: 38px; border-radius: 50%;
-      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05));
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 8px 24px rgba(124,58,237,0.22), var(--ring);
-      color: var(--text-strong); cursor: pointer; font-weight: 800;
-    }
-    .time { font-variant-numeric: tabular-nums; font-size: 0.9rem; color: rgba(255,255,255,0.85); min-width: 112px; }
-    .bar { position: relative; flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 6px; cursor: pointer; overflow: hidden; }
-    .bar-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0%; background: linear-gradient(90deg, #c084fc, #7c3aed); box-shadow: 0 0 14px rgba(168,85,247,0.4) inset; }
+		/* Volume Control */
+		.volume-control {
+			position: fixed;
+			top: 2rem;
+			left: 2rem;
+			z-index: 1000;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 1rem;
+			opacity: 0;
+			transform: translateX(-100px);
+			transition: all 0.5s ease;
+		}
 
-    .toast {
-      position: fixed; right: 20px; bottom: 24px; background: var(--success); color: #06251a;
-      padding: 10px 14px; border-radius: 10px; box-shadow: 0 12px 30px rgba(16,185,129,0.35);
-      opacity: 0; transform: translateY(10px); pointer-events: none;
-      transition: opacity 200ms ease, transform 200ms ease; font-weight: 700; z-index: 1100;
-    }
-    .toast::after {
-      content: ""; position: absolute; right: 18px; bottom: -8px; width: 0; height: 0;
-      border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 10px solid var(--success);
-      filter: drop-shadow(0 -2px 2px rgba(0,0,0,0.12));
-    }
-    .toast.show { opacity: 1; transform: translateY(0); }
+		.volume-control.visible {
+			opacity: 1;
+			transform: translateX(0);
+		}
 
-    /* Secret golden UI (Konami) */
-    .secret-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.55);
-      display: none; align-items: center; justify-content: center;
-      z-index: 1200;
-    }
-    .secret-overlay.show { display: flex; }
-    .secret-card {
-      width: min(880px, 92vw);
-      background: linear-gradient(180deg, #fff3b0, #f6d365 35%, #f3c623 70%, #eab308);
-      color: #2b2100;
-      border-radius: 16px;
-      box-shadow: 0 18px 60px rgba(250,204,21,0.45), inset 0 1px 0 rgba(255,255,255,0.6);
-      border: 1px solid rgba(255,255,255,0.45);
-      padding: 22px;
-      position: relative;
-    }
-    .secret-title {
-      margin: 0 0 6px;
-      font-weight: 900;
-      letter-spacing: 0.04em;
-      background: linear-gradient(90deg, #7c3aed, #a855f7, #f59e0b);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .secret-close {
-      position: absolute; right: 10px; top: 10px;
-      appearance: none; border: 0; background: rgba(0,0,0,0.12);
-      color: #2b2100; padding: 6px 10px; border-radius: 10px; cursor: pointer; font-weight: 800;
-    }
-    .secret-body {
-      margin-top: 8px;
-      color: #2b2100;
-      line-height: 1.5;
-    }
-    .secret-pill {
-      display: inline-block;
-      background: rgba(0,0,0,0.12);
-      padding: 4px 10px;
-      border-radius: 999px;
-      margin: 4px 6px 0 0;
-      font-weight: 700;
-    }
+		.volume-label {
+			color: #c084fc;
+			font-size: 0.9rem;
+			font-weight: 600;
+			text-align: center;
+		}
 
-    canvas { position: fixed; top: 0; left: 0; z-index: -1; }
-    :focus-visible { outline: 2px solid var(--accent-3); outline-offset: 2px; border-radius: 6px; }
+		.volume-slider-container {
+			position: relative;
+			width: 60px;
+			height: 200px;
+			background: rgba(139, 92, 246, 0.1);
+			border: 2px solid rgba(139, 92, 246, 0.3);
+			border-radius: 30px;
+			backdrop-filter: blur(10px);
+			overflow: hidden;
+		}
 
-    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 600ms ease, transform 600ms ease; will-change: opacity, transform; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    section .reveal:nth-child(1) { transition-delay: 60ms; }
-    section .reveal:nth-child(2) { transition-delay: 120ms; }
-    section .reveal:nth-child(3) { transition-delay: 180ms; }
-    section .reveal:nth-child(4) { transition-delay: 240ms; }
-    section .reveal:nth-child(5) { transition-delay: 300ms; }
+		.volume-slider {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: transparent;
+			-webkit-appearance: none;
+			appearance: none;
+			cursor: pointer;
+			writing-mode: bt-lr;
+			-webkit-appearance: slider-vertical;
+		}
 
-    a { color: #c7b7ff; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .contact-list { list-style: none; padding-left: 0; margin: 10px 0 0; }
-    .contact-list li { margin: 8px 0; }
+		.volume-slider::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			appearance: none;
+			width: 0;
+			height: 0;
+			background: transparent;
+			cursor: pointer;
+		}
 
-    @media (max-width: 600px) {
-      header { font-size: 2.2em; }
-      .nav { gap: 10px; }
-      .nav-button { width: 100%; max-width: 420px; }
-      section { margin: 18px auto; padding: 18px; }
-      .music-cover-wrap { height: 200px; }
-    }
+		.volume-slider::-moz-range-thumb {
+			width: 0;
+			height: 0;
+			background: transparent;
+			cursor: pointer;
+			border: none;
+		}
 
-    @media (prefers-reduced-motion: reduce) {
-      * { animation: none !important; transition: none !important; }
-      .reveal, .reveal.visible { opacity: 1 !important; transform: none !important; }
-      .rgb, .shiny-text { -webkit-text-fill-color: currentColor !important; background: none !important; }
-      .game-more { max-height: none !important; opacity: 1 !important; }
-    }
-  </style>
+		.volume-star {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: 20px;
+			height: 20px;
+			background: linear-gradient(45deg, #8b5cf6, #a855f7);
+			clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+			transition: transform 0.3s ease;
+			box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+		}
+
+		.volume-fill {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			background: linear-gradient(to top, rgba(139, 92, 246, 0.3), rgba(168, 85, 247, 0.6));
+			border-radius: 0 0 28px 28px;
+			transition: height 0.3s ease;
+		}
+
+		/* Main Content (hidden initially) */
+		.main-content {
+			opacity: 0;
+			transform: translateY(100px);
+			transition: opacity 1.5s ease, transform 1.5s ease;
+		}
+
+		.main-content.visible {
+			opacity: 1;
+			transform: translateY(0);
+		}
+
+		/* Animated background stars */
+		.stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+		.star { position: absolute; background: #ffffff; border-radius: 50%; animation: twinkle 3s infinite; will-change: transform, opacity; }
+		.star:nth-child(odd) { animation-delay: 1s; }
+		.star:nth-child(3n) { animation-delay: 2s; }
+		@keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+
+		/* Constellation lines */
+		.constellation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
+		.constellation-line {
+			position: absolute; height: 1px;
+			background: linear-gradient(90deg, transparent, #8b5cf6, transparent);
+			opacity: 0.6; transform-origin: left center; animation: constellationFlow 8s infinite linear both;
+		}
+		@keyframes constellationFlow { 0% { opacity: 0; transform: scaleX(0); } 50% { opacity: 0.8; transform: scaleX(1); } 100% { opacity: 0; transform: scaleX(0); } }
+
+		/* Main container with subtle pulsing glow */
+		.container { position: relative; z-index: 10; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 2rem; animation: containerGlow 4s ease-in-out infinite; }
+		@keyframes containerGlow { 0%, 100% { filter: drop-shadow(0 0 0 rgba(139, 92, 246, 0)); } 50% { filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.15)); } }
+
+		/* Navigation */
+		.nav { position: fixed; top: 2rem; right: 2rem; z-index: 100; display: flex; gap: 1rem; flex-wrap: wrap; }
+		.nav-item {
+			position: relative; padding: 0.5rem 1rem; background: rgba(139, 92, 246, 0.2);
+			border: 1px solid rgba(139, 92, 246, 0.5); border-radius: 25px; color: #ffffff; text-decoration: none;
+			transition: all 0.25s ease; backdrop-filter: blur(10px); overflow: hidden;
+		}
+		.nav-item:hover { background: rgba(139, 92, 246, 0.4); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3); }
+
+		/* Ripple for links/buttons */
+		.ripple {
+			position: absolute; border-radius: 999px;
+			background: radial-gradient(circle, rgba(192,132,252,0.35) 0%, rgba(192,132,252,0.18) 45%, transparent 60%);
+			pointer-events: none; width: 12px; height: 12px; transform: translate(-50%, -50%) scale(0.2);
+			animation: ripple 600ms ease-out forwards; filter: blur(0.5px);
+		}
+		@keyframes ripple { 0% { opacity: 0.85; transform: translate(-50%, -50%) scale(0.2); } 80% { opacity: 0.25; } 100% { opacity: 0; transform: translate(-50%, -50%) scale(12); } }
+
+		/* Hero */
+		.hero { text-align: center; margin: 6rem 0 3rem; opacity: 0; animation: fadeInUp 1s ease 0.5s forwards; }
+		.hero h1 {
+			font-size: 3.2rem; background: linear-gradient(45deg, #8b5cf6, #a855f7, #c084fc);
+			-webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+			margin-bottom: 1rem; text-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+		}
+		.hero p { font-size: 1.2rem; color: #c084fc; margin-bottom: 2rem; }
+
+		/* Scroll indicator */
+		.scroll-indicator {
+			display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: #8b5cf6;
+			animation: bounce 2s infinite; margin-top: 1rem;
+		}
+		@keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }
+
+		/* Sections */
+		.content-section {
+			max-width: 860px; width: 100%; margin: 1.5rem 0; padding: 1.5rem;
+			background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3);
+			border-radius: 20px; backdrop-filter: blur(10px);
+			opacity: 0; transform: translateY(50px); transition: all 0.6s ease; will-change: transform, opacity;
+		}
+		.content-section.visible { opacity: 1; transform: translateY(0); }
+		.content-section h2 { color: #a855f7; margin-bottom: 1rem; font-size: 1.8rem; text-align: center; }
+		.content-section p { line-height: 1.8; color: #e0e0e0; margin-bottom: 1rem; }
+		ul { padding-left: 1.2rem; }
+
+		/* Game cards with "See more" */
+		.game-list { list-style: none; padding-left: 0; display: grid; gap: 14px; }
+		.game-item {
+			position: relative; background: rgba(255,255,255,0.04);
+			border: 1px solid rgba(168,85,247,0.25); border-radius: 14px; padding: 14px 14px 12px;
+			box-shadow: 0 6px 22px rgba(124,58,237,0.12); transition: transform 0.2s ease, box-shadow 0.3s ease;
+			overflow: hidden;
+		}
+		.game-item:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(124,58,237,0.22); }
+		.game-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+		.game-title { font-weight: 800; color: #efe7ff; letter-spacing: 0.01em; }
+		.stars-text { display: inline-block; background: linear-gradient(90deg, #ffd166, #f9a826); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 10px rgba(249,168,38,0.25); font-weight: 800; }
+		.game-actions { display: flex; align-items: center; gap: 8px; }
+
+		.see-more {
+			position: relative; appearance: none; border: 0; padding: 10px 14px; border-radius: 999px;
+			background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05));
+			box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 8px 24px rgba(124,58,237,0.22);
+			color: #fff; cursor: pointer; font-weight: 700; letter-spacing: 0.02em;
+			transition: transform 0.14s ease, box-shadow 0.25s ease, background 0.25s ease;
+			overflow: hidden;
+		}
+		.see-more:hover { transform: translateY(-1px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 10px 26px rgba(168,85,247,0.32); }
+		.see-more:active { transform: translateY(0) scale(0.98); }
+
+		.chev {
+			display: inline-block; width: 10px; height: 10px; margin-left: 8px;
+			border-right: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(-45deg); transition: transform 0.25s ease;
+		}
+		.see-more[aria-expanded="true"] .chev { transform: rotate(135deg); }
+
+		.game-more {
+			overflow: hidden; max-height: 0; opacity: 0; transform: translateY(-6px);
+			transition: max-height 450ms cubic-bezier(.2,.9,.2,1), opacity 380ms ease, transform 380ms ease, filter 380ms ease;
+			will-change: max-height, opacity, transform; margin-top: 10px; border-top: 1px dashed rgba(168,85,247,0.35); padding-top: 0;
+			filter: saturate(0.9);
+		}
+		.game-more.open {
+			max-height: 520px; opacity: 1; transform: translateY(0); padding-top: 10px; filter: saturate(1.05);
+			animation: glowPulse 650ms ease;
+		}
+		@keyframes glowPulse {
+			0% { box-shadow: 0 0 0 rgba(168,85,247,0); }
+			40% { box-shadow: 0 0 24px rgba(168,85,247,0.25); }
+			100% { box-shadow: 0 0 0 rgba(168,85,247,0); }
+		}
+
+		/* Floating particles */
+		.particle { position: fixed; width: 4px; height: 4px; background: #8b5cf6; border-radius: 50%; pointer-events: none; z-index: 5; animation: float 6s infinite linear; }
+		@keyframes float { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-100px) rotate(360deg); opacity: 0; } }
+
+		/* RGB / shiny text utilities */
+		.rgb {
+			background: linear-gradient(90deg, #ff3c3c, #ffd64a, #29ff8e, #28c6ff, #8a2be2, #ff3c3c);
+			background-size: 300% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+			animation: rgbShift 6s linear infinite; font-weight: 800; letter-spacing: 0.01em;
+		}
+		@keyframes rgbShift { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
+
+		.shiny-text {
+			background: linear-gradient(90deg, rgba(255,255,255,0.95), #c084fc 30%, #a855f7 55%, #7c3aed 75%, rgba(255,255,255,0.95));
+			background-size: 220% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+			animation: shineSweep 3.2s ease-in-out infinite; font-weight: 800;
+		}
+		@keyframes shineSweep { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+		.glow { color: #efe7ff; text-shadow: 0 0 8px rgba(168,85,247,0.55), 0 0 18px rgba(124,58,237,0.45), 0 0 32px rgba(192,132,252,0.35); font-weight: 800; }
+		.underline-glow { position: relative; display: inline-block; }
+		.underline-glow::after {
+			content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 8px;
+			background:
+				radial-gradient(10px 6px at 20% 50%, rgba(192,132,252,0.7), transparent 70%),
+				radial-gradient(10px 6px at 50% 50%, rgba(168,85,247,0.7), transparent 70%),
+				radial-gradient(10px 6px at 80% 50%, rgba(124,58,237,0.7), transparent 70%);
+			filter: blur(4px); opacity: 0.9; pointer-events: none;
+		}
+
+		/* Responsive */
+		@media (max-width: 768px) {
+			.menu-title { font-size: 2.5rem; }
+			.menu-subtitle { font-size: 1.2rem; }
+			.music-toggle { font-size: 1rem; padding: 0.8rem 1.5rem; }
+			.hero h1 { font-size: 2.4rem; }
+			.hero p { font-size: 1rem; }
+			.nav { top: 1rem; right: 1rem; left: 1rem; justify-content: center; }
+			.content-section { margin: 1rem 0; padding: 1.25rem; }
+			.volume-control { top: 1rem; left: 1rem; }
+			.volume-slider-container { width: 50px; height: 150px; }
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			* { animation: none !important; transition: none !important; }
+			.content-section, .content-section.visible { opacity: 1 !important; transform: none !important; }
+			.rgb, .shiny-text { -webkit-text-fill-color: currentColor !important; background: none !important; }
+			.game-more { max-height: none !important; opacity: 1 !important; transform: none !important; }
+		}
+
+		@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+	</style>
 </head>
 <body>
-  <canvas id="stars" aria-hidden="true"></canvas>
+	<!-- Main Menu -->
+	<div class="main-menu" id="mainMenu">
+		<div class="menu-stars" id="menuStars"></div>
+		<div class="menu-content">
+			<h1 class="menu-title">Nova</h1>
+			<p class="menu-subtitle">Welcome to my digital universe</p>
+			<button class="music-toggle" id="musicToggle">
+				<span class="music-icon">♪</span>
+				Enter the Cosmos
+			</button>
+		</div>
+	</div>
 
-  <div class="header-wrap">
-    <header id="site-title" data-title="Nova">Nova</header>
-  </div>
+	<!-- Volume Control -->
+	<div class="volume-control" id="volumeControl">
+		<div class="volume-label">Volume</div>
+		<div class="volume-slider-container">
+			<div class="volume-fill" id="volumeFill"></div>
+			<div class="volume-star" id="volumeStar"></div>
+			<input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50" orient="vertical">
+		</div>
+	</div>
 
-  <nav aria-label="Primary">
-    <div class="nav" role="tablist" aria-orientation="horizontal">
-      <button class="nav-button" data-target="bio" role="tab" aria-selected="false" aria-controls="bio">
-        About Me
-        <span class="shimmer" aria-hidden="true"></span>
-      </button>
-      <button class="nav-button" data-target="games" role="tab" aria-selected="false" aria-controls="games">
-        Game Reviews
-        <span class="shimmer" aria-hidden="true"></span>
-      </button>
-      <button class="nav-button" data-target="music" role="tab" aria-selected="false" aria-controls="music">
-        Music
-        <span class="shimmer" aria-hidden="true"></span>
-      </button>
-      <button class="nav-button" data-target="contact" role="tab" aria-selected="false" aria-controls="contact">
-        Contact Me
-        <span class="shimmer" aria-hidden="true"></span>
-      </button>
-    </div>
-  </nav>
+	<!-- Audio element -->
+	<audio id="backgroundMusic" loop>
+		<source src="Musica0.mp3" type="audio/mpeg">
+	</audio>
 
-  <main>
-    <section id="bio" role="tabpanel" aria-labelledby="bio-tab">
-      <h2 class="reveal">About Me</h2>
-      <div class="about-paragraph reveal">
-        I’m <span class="rgb underline-glow">16</span>. I like <span class="shiny-text">building things</span>, learning at my own pace, and keeping my circle small. I’m mostly introverted, but it depends on the room and the people in it. I prefer <span class="glow">steady effort</span> over loud declarations, and I’m wary of <span class="underline-glow">shortcuts</span> that promise everything and deliver very little.
-      </div>
-      <div class="about-paragraph reveal">
-        I don’t chase trends; I chase <span class="shiny-text">progress</span>. <span class="underline-glow">Honest feedback</span> beats empty praise, and <span class="glow">consistency</span> beats hype. If you like a serious tone with the occasional dry joke, we’ll get along. Mostly introverted as my behavior indicates, but it depends on context and social disposition.
-      </div>
-      <div class="about-paragraph reveal">
-        Please don’t add me if <span class="rgb underline-glow">favoritism</span> is your thing.
-      </div>
-    </section>
+	<!-- Main Content (hidden initially) -->
+	<div class="main-content" id="mainContent">
+		<!-- Animated background elements -->
+		<div class="stars" id="stars"></div>
+		<div class="constellation" id="constellation"></div>
 
-    <section id="games" role="tabpanel" aria-labelledby="games-tab">
-      <h2 class="reveal">Game Reviews</h2>
-      <p class="reveal">Notes on a few standouts I keep coming back to.</p>
-      <ul class="game-list">
-        <li class="game-item reveal" id="game-celeste">
-          <div><strong class="glow">Celeste</strong> – Precision platforming with heart and discipline.</div>
-          <div class="game-actions">
-            <button class="mini-button read-more" data-target="#more-celeste" aria-expanded="false" aria-controls="more-celeste">Read More</button>
-          </div>
-          <div class="game-more" id="more-celeste">
-            <p><span class="stars">★★★★★</span> (5/5)</p>
-            <p>My favorite platformer right now. It actually made me want to 100% it — which is unusual for me — because every challenge feels earned, fair, and just addictive enough. Clean design, sharp controls, and a difficulty curve that teaches without preaching.</p>
-          </div>
-        </li>
-        <li class="game-item reveal" id="game-sts">
-          <div><strong class="shiny-text">Slay the Spire</strong> – Deckbuilder that turns “one more run” into a lifestyle.</div>
-          <div class="game-actions">
-            <button class="mini-button read-more" data-target="#more-sts" aria-expanded="false" aria-controls="more-sts">Read More</button>
-          </div>
-          <div class="game-more" id="more-sts">
-            <p><span class="stars">★★★★★</span> (5/5)</p>
-            <p>Also a favorite. It’s dangerously addictive and endlessly replayable — I can run it over and over without getting bored. The strategy depth sneaks up on you, and suddenly you’re planning routes in your sleep.</p>
-          </div>
-        </li>
-      </ul>
-    </section>
+		<!-- Navigation -->
+		<nav class="nav" aria-label="Primary">
+			<a href="#bio" class="nav-item">About Me</a>
+			<a href="#games" class="nav-item">Game Reviews</a>
+			<a href="#contact" class="nav-item">Contact Me</a>
+		</nav>
 
-    <section id="music" role="tabpanel" aria-labelledby="music-tab">
-      <h2 class="reveal">Music</h2>
-      <p class="reveal">My favorite songs!</p>
-      <ul class="music-grid">
-        <li class="music-card reveal">
-          <div class="music-cover-wrap">
-            <img class="music-cover" alt="Cover art for Love Train" src="https://upload.wikimedia.org/wikipedia/en/7/7d/LoveTrainEpicRecords.png" />
-          </div>
-          <div class="music-meta">
-            <h3 class="music-title">Love Train</h3>
-            <p class="music-credits">Credits: The O'Jays • Artwork source:
-              <a href="https://upload.wikimedia.org/wikipedia/en/7/7d/LoveTrainEpicRecords.png" target="_blank" rel="noopener">Wikimedia</a>
-            </p>
-          </div>
-          <div class="music-controls" data-audio="Musica1.mp3">
-            <button class="play-btn" aria-label="Play/Pause">▶</button>
-            <div class="bar" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
-              <div class="bar-fill"></div>
-            </div>
-            <div class="time"><span class="cur">0:00</span> / <span class="dur">0:00</span></div>
-          </div>
-        </li>
+		<!-- Main content -->
+		<div class="container">
+			<section class="hero">
+				<h1>Welcome to My <span class="rgb">Universe</span></h1>
+				<p>Navigating through the cosmos of <span class="shiny-text">creativity</span> and <span class="rgb">innovation</span></p>
+				<div class="scroll-indicator">
+					<span>Scroll to explore</span>
+					<span>↓</span>
+				</div>
+			</section>
 
-        <li class="music-card reveal">
-          <div class="music-cover-wrap">
-            <img class="music-cover" alt="Cover art for The Wonder of You" src="https://t2.genius.com/unsafe/847x0/https%3A%2F%2Fimages.genius.com%2Fd39b7523dc3185972428462d9e5ceaac.1000x1000x1.png" />
-          </div>
-          <div class="music-meta">
-            <h3 class="music-title">The Wonder of You</h3>
-            <p class="music-credits">Credits: Elvis Presley • Artwork source:
-              <a href="https://t2.genius.com/unsafe/847x0/https%3A%2F%2Fimages.genius.com%2Fd39b7523dc3185972428462d9e5ceaac.1000x1000x1.png" target="_blank" rel="noopener">Genius CDN</a>
-            </p>
-          </div>
-          <div class="music-controls" data-audio="Musica2.mp3">
-            <button class="play-btn" aria-label="Play/Pause">▶</button>
-            <div class="bar" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
-              <div class="bar-fill"></div>
-            </div>
-            <div class="time"><span class="cur">0:00</span> / <span class="dur">0:00</span></div>
-          </div>
-        </li>
+			<section id="bio" class="content-section" tabindex="-1">
+				<h2>About Me</h2>
+				<p>I'm <span class="rgb underline-glow">16</span>. I like <span class="shiny-text">building things</span>, learning at my own pace, and keeping my circle small. I'm mostly introverted, but it depends on the room and the people in it. I prefer <span class="glow">steady effort</span> over loud declarations, and I'm wary of <span class="underline-glow">shortcuts</span> that promise everything and deliver very little.</p>
+				<p>I don't chase trends; I chase <span class="shiny-text">progress</span>. <span class="underline-glow">Honest feedback</span> beats empty praise, and <span class="glow">consistency</span> beats hype. If you like a serious tone with the occasional dry joke, we'll get along. Mostly introverted as my behavior indicates, but it depends on context and social disposition.</p>
+				<p>Please don't add me if <span class="rgb underline-glow">favoritism</span> is your thing.</p>
+			</section>
 
-        <li class="music-card reveal">
-          <div class="music-cover-wrap">
-            <img class="music-cover" alt="Cover art for Soft & Wet" src="https://upload.wikimedia.org/wikipedia/en/b/b6/Prince_Soft%26Wet.jpg" />
-          </div>
-          <div class="music-meta">
-            <h3 class="music-title">Soft &amp; Wet</h3>
-            <p class="music-credits">Credits: Prince • Artwork source:
-              <a href="https://upload.wikimedia.org/wikipedia/en/b/b6/Prince_Soft%26Wet.jpg" target="_blank" rel="noopener">Wikimedia</a>
-            </p>
-          </div>
-          <div class="music-controls" data-audio="Musica3.mp3">
-            <button class="play-btn" aria-label="Play/Pause">▶</button>
-            <div class="bar" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
-              <div class="bar-fill"></div>
-            </div>
-            <div class="time"><span class="cur">0:00</span> / <span class="dur">0:00</span></div>
-          </div>
-        </li>
-      </ul>
-      <p class="reveal" style="margin-top:12px;font-size:0.9rem;color:rgba(255,255,255,0.7);">
-      </p>
-    </section>
+			<section id="games" class="content-section" tabindex="-1">
+				<h2>Game Reviews</h2>
+				<p>Notes on a few standouts I keep coming back to.</p>
+				<ul class="game-list">
+					<li class="game-item" id="game-celeste">
+						<div class="game-head">
+							<div class="game-title"><strong class="glow">Celeste</strong> – Precision platforming with heart and discipline.</div>
+							<div class="game-actions">
+								<button class="see-more" type="button" aria-expanded="false" aria-controls="more-celeste">
+									See more <span class="chev" aria-hidden="true"></span>
+								</button>
+							</div>
+						</div>
+						<div class="game-more" id="more-celeste">
+							<p><span class="stars-text">★★★★★</span> (5/5)</p>
+							<p>My favorite platformer right now. It actually made me want to 100% it — which is unusual for me — because every challenge feels earned, fair, and just addictive enough. Clean design, sharp controls, and a difficulty curve that teaches without preaching.</p>
+						</div>
+					</li>
 
-    <section id="contact" role="tabpanel" aria-labelledby="contact-tab">
-      <h2 class="reveal">Contact</h2>
-      <p class="reveal">Reach out if you’ve got something to share.</p>
-      <ul class="contact-list">
-        <li class="reveal">Email: <a href="mailto:adrbalrus@proton.me">adrbalrus@proton.me</a></li>
-        <li class="reveal">Discord: <button id="discord-btn" class="mini-button" type="button" data-username="wuraitro">Copy Username</button></li>
-        <li class="reveal">Roblox: <a href="https://www.roblox.com/users/2517791964/profile" target="_blank" rel="noopener">roblox.com/users/2517791964/profile</a></li>
-      </ul>
-    </section>
-  </main>
+					<li class="game-item" id="game-sts">
+						<div class="game-head">
+							<div class="game-title"><strong class="shiny-text">Slay the Spire</strong> – Deckbuilder that turns <em>"one more run"</em> into a lifestyle.</div>
+							<div class="game-actions">
+								<button class="see-more" type="button" aria-expanded="false" aria-controls="more-sts">
+									See more <span class="chev" aria-hidden="true"></span>
+								</button>
+							</div>
+						</div>
+						<div class="game-more" id="more-sts">
+							<p><span class="stars-text">★★★★★</span> (5/5)</p>
+							<p>Also a favorite. It's dangerously addictive and endlessly replayable — I can run it over and over without getting bored. The strategy depth sneaks up on you, and suddenly you're planning routes in your sleep.</p>
+						</div>
+					</li>
+				</ul>
+			</section>
 
-  <!-- Secret Golden UI -->
-  <div id="secret" class="secret-overlay" aria-hidden="true">
-    <div class="secret-card" role="dialog" aria-modal="true" aria-labelledby="secret-title">
-      <button class="secret-close" id="secret-close" type="button">Close</button>
-      <h3 id="secret-title" class="secret-title">Golden Room: Friends</h3>
-      <div class="secret-body">
-        <p>Hello! This is an easter egg, nice you've found it! Some people I call friends!:</p>
-        <p>
-          <span class="secret-pill">Anhilico</span>
-          <span class="secret-pill">Axo</span>
-          <span class="secret-pill">Cyber</span>
-          <span class="secret-pill">Zeta</span>
-        </p>
-        <p style="margin-top:10px;">If you found this, you have good taste in shortcuts — the useful kind.</p>
-      </div>
-    </div>
-  </div>
+			<section id="contact" class="content-section" tabindex="-1">
+				<h2>Contact</h2>
+				<p>Reach out if you've got something to share.</p>
+				<ul>
+					<li>Email: <a href="mailto:adrbalrus@proton.me">adrbalrus@proton.me</a></li>
+					<li>Discord: <span class="rgb">wuraitro</span></li>
+					<li>Roblox: <a href="https://www.roblox.com/users/2517791964/profile" target="_blank" rel="noopener">roblox.com/users/2517791964/profile</a></li>
+				</ul>
+			</section>
+		</div>
+	</div>
 
-  <div id="discord-toast" class="toast" role="status" aria-live="polite">Successful!</div>
+	<script>
+		// Create menu stars
+		function createMenuStars() {
+			const menuStarsContainer = document.getElementById('menuStars');
+			const numStars = 80;
+			for (let i = 0; i < numStars; i++) {
+				const star = document.createElement('div');
+				star.className = 'menu-star';
+				star.style.left = Math.random() * 100 + '%';
+				star.style.top = Math.random() * 100 + '%';
+				const size = Math.random() * 2 + 1;
+				star.style.width = size + 'px';
+				star.style.height = size + 'px';
+				star.style.animationDelay = (Math.random() * 4).toFixed(2) + 's';
+				menuStarsContainer.appendChild(star);
+			}
+		}
 
-  <script>
-    /* Buttons scroll to sections (no hiding) */
-    const buttons = Array.from(document.querySelectorAll('.nav-button'));
-    function scrollToSection(id, pushHash = true) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      if (pushHash) location.hash = '#' + id;
-      buttons.forEach(btn => btn.setAttribute('aria-selected', String(btn.getAttribute('data-target') === id)));
-    }
-    function initFromHash() {
-      const id = location.hash.replace('#', '') || 'bio';
-      scrollToSection(id, false);
-    }
-    buttons.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const rect = btn.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const circle = document.createElement('span');
-        circle.className = 'ripple';
-        circle.style.left = x + 'px';
-        circle.style.top = y + 'px';
-        btn.appendChild(circle);
-        setTimeout(() => circle.remove(), 650);
-        scrollToSection(btn.getAttribute('data-target'));
-      });
-    });
-    window.addEventListener('hashchange', initFromHash);
-    initFromHash();
+		// Create animated stars
+		function createStars() {
+			const starsContainer = document.getElementById('stars');
+			const numStars = 120;
+			for (let i = 0; i < numStars; i++) {
+				const star = document.createElement('div');
+				star.className = 'star';
+				star.style.left = Math.random() * 100 + '%';
+				star.style.top = Math.random() * 100 + '%';
+				const size = Math.random() * 3 + 1;
+				star.style.width = size + 'px';
+				star.style.height = size + 'px';
+				star.style.animationDelay = (Math.random() * 3).toFixed(2) + 's';
+				starsContainer.appendChild(star);
+			}
+		}
 
-    /* Starfield with purple tint */
-    const canvas = document.getElementById("stars");
-    const ctx = canvas.getContext("2d", { alpha: true });
-    let w, h, stars = [];
-    const STAR_COUNT = Math.min(260, (window.innerWidth < 600 ? 140 : 240));
-    let mouse = { x: -1000, y: -1000 };
+		// Create constellation lines
+		function createConstellation() {
+			const constellationContainer = document.getElementById('constellation');
+			const numLines = 24;
+			for (let i = 0; i < numLines; i++) {
+				const line = document.createElement('div');
+				line.className = 'constellation-line';
+				line.style.left = Math.random() * 100 + '%';
+				line.style.top = Math.random() * 100 + '%';
+				line.style.width = Math.random() * 240 + 80 + 'px';
+				line.style.transform = `rotate(${Math.random() * 360}deg)`;
+				line.style.animationDelay = (Math.random() * 8).toFixed(2) + 's';
+				constellationContainer.appendChild(line);
+			}
+		}
 
-    function resize() {
-      const dpr = Math.max(1, window.devicePixelRatio || 1);
-      w = canvas.width = Math.floor(window.innerWidth * dpr);
-      h = canvas.height = Math.floor(window.innerHeight * dpr);
-      canvas.style.width = window.innerWidth + 'px';
-      canvas.style.height = window.innerHeight + 'px';
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    window.addEventListener("resize", resize, { passive: true });
-    resize();
+		// Floating particles
+		function createParticles() {
+			setInterval(() => {
+				const particle = document.createElement('div');
+				particle.className = 'particle';
+				particle.style.left = Math.random() * 100 + '%';
+				particle.style.animationDuration = (Math.random() * 3 + 3).toFixed(2) + 's';
+				document.body.appendChild(particle);
+				setTimeout(() => particle.remove(), 6000);
+			}, 500);
+		}
 
-    function randomStar() {
-      return {
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        r: Math.random() * 1.6 + 0.5,
-        alpha: Math.random() * 0.9 + 0.1,
-        speedY: Math.random() * 0.45 + 0.18,
-        vx: 0,
-        vy: 0,
-        tint: Math.random() < 0.7 ? '224,208,255' : (Math.random() < 0.5 ? '192,132,252' : '139,92,246')
-      };
-    }
-    stars = Array.from({ length: STAR_COUNT }, randomStar);
+		// Volume control functionality
+		function setupVolumeControl() {
+			const volumeSlider = document.getElementById('volumeSlider');
+			const volumeFill = document.getElementById('volumeFill');
+			const volumeStar = document.getElementById('volumeStar');
+			const backgroundMusic = document.getElementById('backgroundMusic');
 
-    canvas.addEventListener("mousemove", e => { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
+			function updateVolume() {
+				const volume = volumeSlider.value / 100;
+				backgroundMusic.volume = volume;
+				
+				// Update visual fill
+				volumeFill.style.height = volumeSlider.value + '%';
+				
+				// Rotate star based on volume
+				const rotation = (volumeSlider.value - 50) * 3.6; // -180 to 180 degrees
+				volumeStar.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+			}
 
-    function drawStars() {
-      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      for (let i = 0; i < stars.length; i++) {
-        const star = stars[i];
-        const dx = star.x - mouse.x;
-        const dy = star.y - mouse.y;
-        const dist = Math.hypot(dx, dy);
-        if (dist < 110) {
-          const angle = Math.atan2(dy, dx);
-          const force = (110 - dist) / 110;
-          star.vx += Math.cos(angle) * force * 0.45;
-          star.vy += Math.sin(angle) * 0.45 * force;
-        }
-        star.alpha += (Math.random() - 0.5) * 0.05;
-        star.alpha = Math.max(0.12, Math.min(1, star.alpha));
-        star.y += star.speedY + star.vy * 0.6;
-        star.x += star.vx * 0.6;
-        star.vx *= 0.94;
-        star.vy *= 0.94;
-        if (star.y > window.innerHeight) { star.y = 0; star.x = Math.random() * window.innerWidth; }
-        if (star.x < 0 || star.x > window.innerWidth) { star.x = Math.random() * window.innerWidth; star.y = 0; }
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${star.tint},${star.alpha})`;
-        ctx.shadowColor = 'rgba(168,85,247,0.45)';
-        ctx.shadowBlur = 6;
-        ctx.fill();
-      }
-      requestAnimationFrame(drawStars);
-    }
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (!media.matches) { drawStars(); }
+			volumeSlider.addEventListener('input', updateVolume);
+			
+			// Initialize volume
+			updateVolume();
+		}
 
-    /* Scroll reveal */
-    const revealables = Array.from(document.querySelectorAll('.reveal'));
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { root: null, threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
-    revealables.forEach(el => observer.observe(el));
+		// Intersection Observer for scroll animations
+		function setupScrollAnimations() {
+			const observer = new IntersectionObserver((entries) => {
+				entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+			}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-    /* Read More toggles */
-    const toggles = Array.from(document.querySelectorAll('.read-more'));
-    toggles.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const sel = btn.getAttribute('data-target');
-        const panel = document.querySelector(sel);
-        if (!panel) return;
-        const isOpen = panel.classList.toggle('open');
-        btn.setAttribute('aria-expanded', String(isOpen));
-        btn.textContent = isOpen ? 'Read Less' : 'Read More';
-      });
-    });
+			document.querySelectorAll('.content-section').forEach(section => observer.observe(section));
+		}
 
-    /* Music player logic */
-    const controls = Array.from(document.querySelectorAll('.music-controls'));
-    const audios = new Map();
-    let currentAudio = null;
-    let currentUI = null;
+		// Smooth scrolling for navigation + ripple
+		function setupSmoothScrolling() {
+			document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+				anchor.addEventListener('click', function (e) {
+					const rect = this.getBoundingClientRect();
+					const x = e.clientX - rect.left;
+					const y = e.clientY - rect.top;
+					const circle = document.createElement('span');
+					circle.className = 'ripple';
+					circle.style.left = x + 'px';
+					circle.style.top = y + 'px';
+					this.appendChild(circle);
+					setTimeout(() => circle.remove(), 650);
 
-    function formatTime(s) {
-      if (!Number.isFinite(s)) return '0:00';
-      const m = Math.floor(s / 60);
-      const sec = Math.floor(s % 60).toString().padStart(2, '0');
-      return `${m}:${sec}`;
-    }
+					e.preventDefault();
+					const target = document.querySelector(this.getAttribute('href'));
+					if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				}, { passive: false });
+			});
+		}
 
-    function setPlayIcon(btn, playing) {
-      btn.textContent = playing ? '⏸' : '▶';
-      btn.setAttribute('aria-label', playing ? 'Pause' : 'Play');
-    }
+		// Parallax effect
+		function setupParallax() {
+			window.addEventListener('scroll', () => {
+				const scrolled = window.pageYOffset || document.documentElement.scrollTop;
+				const stars = document.getElementById('stars');
+				const constellation = document.getElementById('constellation');
+				if (stars) stars.style.transform = `translateY(${scrolled * 0.5}px)`;
+				if (constellation) constellation.style.transform = `translateY(${scrolled * 0.3}px)`;
+			}, { passive: true });
+		}
 
-    function wireControl(ctrl) {
-      const src = ctrl.getAttribute('data-audio');
-      const btn = ctrl.querySelector('.play-btn');
-      const bar = ctrl.querySelector('.bar');
-      const fill = ctrl.querySelector('.bar-fill');
-      const cur = ctrl.querySelector('.cur');
-      const dur = ctrl.querySelector('.dur');
+		// See more toggles with smooth, satisfying animations
+		function setupSeeMore() {
+			document.querySelectorAll('.see-more').forEach(btn => {
+				const moreId = btn.getAttribute('aria-controls');
+				const panel = document.getElementById(moreId);
 
-      let audio = audios.get(src);
-      if (!audio) {
-        audio = new Audio(src);
-        audio.preload = 'metadata';
-        audios.set(src, audio);
-        audio.addEventListener('loadedmetadata', () => {
-          dur.textContent = formatTime(audio.duration);
-        });
-        audio.addEventListener('timeupdate', () => {
-          cur.textContent = formatTime(audio.currentTime);
-          const pct = (audio.currentTime / (audio.duration || 1)) * 100;
-          fill.style.width = pct + '%';
-          bar.setAttribute('aria-valuenow', Math.round(pct));
-        });
-        audio.addEventListener('ended', () => {
-          setPlayIcon(btn, false);
-          fill.style.width = '0%';
-          cur.textContent = '0:00';
-          currentAudio = null;
-          currentUI = null;
-        });
-      }
+				function toggle(e) {
+					// ripple
+					const rect = btn.getBoundingClientRect();
+					const x = (e?.clientX ?? rect.width / 2) - rect.left;
+					const y = (e?.clientY ?? rect.height / 2) - rect.top;
+					const circle = document.createElement('span');
+					circle.className = 'ripple';
+					circle.style.left = x + 'px';
+					circle.style.top = y + 'px';
+					btn.appendChild(circle);
+					setTimeout(() => circle.remove(), 650);
 
-      btn.addEventListener('click', () => {
-        if (currentAudio && currentAudio !== audio) {
-          currentAudio.pause();
-          if (currentUI) setPlayIcon(currentUI.querySelector('.play-btn'), false);
-        }
-        if (audio.paused) {
-          audio.play();
-          currentAudio = audio;
-          currentUI = ctrl;
-          setPlayIcon(btn, true);
-        } else {
-          audio.pause();
-          setPlayIcon(btn, false);
-          currentAudio = null;
-          currentUI = null;
-        }
-      });
+					const expanded = btn.getAttribute('aria-expanded') === 'true';
+					btn.setAttribute('aria-expanded', String(!expanded));
+					panel.classList.toggle('open', !expanded);
 
-      function seek(clientX) {
-        const rect = bar.getBoundingClientRect();
-        const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
-        audio.currentTime = ratio * (audio.duration || 0);
-      }
-      bar.addEventListener('click', (e) => { if (Number.isFinite(audio.duration)) seek(e.clientX); });
+					// Change button text
+					btn.firstChild.nodeValue = !expanded ? 'See less ' : 'See more ';
 
-      bar.addEventListener('keydown', (e) => {
-        if (!Number.isFinite(audio.duration)) return;
-        const step = audio.duration * 0.02;
-        if (e.key === 'ArrowLeft') { audio.currentTime = Math.max(0, audio.currentTime - step); e.preventDefault(); }
-        if (e.key === 'ArrowRight') { audio.currentTime = Math.min(audio.duration, audio.currentTime + step); e.preventDefault(); }
-        if (e.key === 'Enter' || e.key === ' ') { btn.click(); e.preventDefault(); }
-      });
-    }
-    controls.forEach(wireControl);
+					// If opening, ensure it scrolls into view nicely
+					if (!expanded) {
+						setTimeout(() => {
+							panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+						}, 60);
+					}
+				}
 
-    /* Discord copy + toast */
-    const discordBtn = document.getElementById('discord-btn');
-    const toast = document.getElementById('discord-toast');
-    function showToast() {
-      toast.classList.add('show');
-      clearTimeout(showToast._t);
-      showToast._t = setTimeout(() => toast.classList.remove('show'), 1400);
-    }
-    async function copyDiscordUsername(username) {
-      try { await navigator.clipboard.writeText(username); showToast(); }
-      catch {
-        const ta = document.createElement('textarea'); ta.value = username; document.body.appendChild(ta);
-        ta.select(); document.execCommand('copy'); ta.remove(); showToast();
-      }
-    }
-    if (discordBtn) {
-      discordBtn.addEventListener('click', (e) => {
-        const rect = discordBtn.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const circle = document.createElement('span');
-        circle.className = 'ripple';
-        circle.style.left = x + 'px';
-        circle.style.top = y + 'px';
-        discordBtn.appendChild(circle);
-        setTimeout(() => circle.remove(), 650);
-        const username = discordBtn.getAttribute('data-username');
-        copyDiscordUsername(username);
-      });
-    }
+				btn.addEventListener('click', toggle);
+				btn.addEventListener('keydown', (e) => {
+					if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+				});
+			});
+		}
 
-    /* Konami code: W W S S A D A D B A */
-    const KONAMI = ['w','w','s','s','a','d','a','d','b','a'];
-    let buffer = [];
-    let lastTs = 0;
-    const maxGapMs = 900; // "kinda fast": each key within 0.9s
+		// Focus section when navigated via hash
+		function focusSectionOnHash() {
+			if (location.hash) {
+				const el = document.querySelector(location.hash);
+				if (el) el.focus({ preventScroll: true });
+			}
+			window.addEventListener('hashchange', () => {
+				const el = document.querySelector(location.hash);
+				if (el) el.focus({ preventScroll: true });
+			});
+		}
 
-    function openSecret() {
-      const overlay = document.getElementById('secret');
-      overlay.classList.add('show');
-      overlay.setAttribute('aria-hidden', 'false');
-    }
-    function closeSecret() {
-      const overlay = document.getElementById('secret');
-      overlay.classList.remove('show');
-      overlay.setAttribute('aria-hidden', 'true');
-    }
-    document.getElementById('secret-close').addEventListener('click', closeSecret);
-    document.getElementById('secret').addEventListener('click', (e) => {
-      if (e.target.id === 'secret') closeSecret();
-    });
+		// Music toggle and menu transition with FULLSCREEN
+		function setupMenuTransition() {
+			const musicToggle = document.getElementById('musicToggle');
+			const mainMenu = document.getElementById('mainMenu');
+			const mainContent = document.getElementById('mainContent');
+			const volumeControl = document.getElementById('volumeControl');
+			const backgroundMusic = document.getElementById('backgroundMusic');
 
-    window.addEventListener('keydown', (e) => {
-      const now = Date.now();
-      const key = (e.key || '').toLowerCase();
-      if (now - lastTs > maxGapMs) buffer = []; // too slow; reset
-      lastTs = now;
-      buffer.push(key);
-      if (buffer.length > KONAMI.length) buffer.shift();
-      if (KONAMI.every((k, i) => buffer[i] === k)) {
-        buffer = [];
-        openSecret();
-      }
-    });
-  </script>
+			musicToggle.addEventListener('click', async () => {
+				// Add ripple effect
+				const rect = musicToggle.getBoundingClientRect();
+				const x = rect.width / 2;
+				const y = rect.height / 2;
+				const circle = document.createElement('span');
+				circle.className = 'ripple';
+				circle.style.left = x + 'px';
+				circle.style.top = y + 'px';
+				musicToggle.appendChild(circle);
+				setTimeout(() => circle.remove(), 650);
+
+				// Request fullscreen
+				try {
+					if (document.documentElement.requestFullscreen) {
+						await document.documentElement.requestFullscreen();
+					} else if (document.documentElement.webkitRequestFullscreen) {
+						await document.documentElement.webkitRequestFullscreen();
+					} else if (document.documentElement.msRequestFullscreen) {
+						await document.documentElement.msRequestFullscreen();
+					}
+				} catch (err) {
+					console.log('Fullscreen not supported or denied');
+				}
+
+				// Start music with fade in
+				backgroundMusic.volume = 0;
+				backgroundMusic.play().catch(e => console.log('Audio play failed:', e));
+				
+				// Fade in music
+				const fadeIn = setInterval(() => {
+					if (backgroundMusic.volume < 0.5) {
+						backgroundMusic.volume += 0.01;
+					} else {
+						clearInterval(fadeIn);
+					}
+				}, 50);
+
+				// Hide menu and show content
+				mainMenu.classList.add('hidden');
+				setTimeout(() => {
+					mainContent.classList.add('visible');
+					volumeControl.classList.add('visible');
+					// Initialize all the main content features
+					createStars();
+					createConstellation();
+					createParticles();
+					setupScrollAnimations();
+					setupSmoothScrolling();
+					setupParallax();
+					setupSeeMore();
+					focusSectionOnHash();
+					setupVolumeControl();
+				}, 800);
+			});
+		}
+
+		// Initialize menu
+		document.addEventListener('DOMContentLoaded', () => {
+			createMenuStars();
+			setupMenuTransition();
+		});
+	</script>
 </body>
 </html>
