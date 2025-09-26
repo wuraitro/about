@@ -3,13 +3,18 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>About Wuraitro</title>
+	<title>About Me</title>
 	<style>
 		* { margin: 0; padding: 0; box-sizing: border-box; }
 
+		html, body { min-height: 100%; }
+
 		body {
 			font-family: 'Arial', sans-serif;
-			background: radial-gradient(ellipse at center, #1a0a2e 0%, #0f0f23 50%, #000000 100%);
+			background:
+				radial-gradient(1200px 800px at 50% 0%, #1a0a2e 0%, rgba(26,10,46,0.6) 45%, rgba(26,10,46,0.0) 70%),
+				linear-gradient(to bottom, #0f0f23 0%, #130a22 45%, #12071e 70%, #0b0014 100%);
+			background-attachment: fixed, fixed;
 			color: #ffffff;
 			overflow-x: hidden;
 			min-height: 100vh;
@@ -21,8 +26,8 @@
 			position: fixed;
 			top: 0;
 			left: 0;
-			width: 100%;
-			height: 100%;
+			width: 100vw;
+			height: 100vh;
 			pointer-events: none;
 			z-index: 0;
 		}
@@ -95,6 +100,7 @@
 			margin-bottom: 1rem;
 			animation: titleGlow 3s ease-in-out infinite;
 			text-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+			text-wrap: balance;
 		}
 
 		@keyframes titleGlow {
@@ -114,6 +120,7 @@
 			margin-bottom: 3rem;
 			opacity: 0;
 			animation: menuFadeIn 2s ease 1s forwards;
+			text-wrap: balance;
 		}
 
 		/* Music Toggle Button */
@@ -146,9 +153,7 @@
 			animation: rotate 3s linear infinite;
 		}
 
-		@keyframes rotate {
-			to { transform: rotate(360deg); }
-		}
+		@keyframes rotate { to { transform: rotate(360deg); } }
 
 		.music-toggle:hover {
 			transform: translateY(-3px) scale(1.05);
@@ -156,19 +161,10 @@
 			background: linear-gradient(135deg, rgba(139, 92, 246, 0.4), rgba(168, 85, 247, 0.3));
 		}
 
-		.music-toggle:active {
-			transform: translateY(-1px) scale(1.02);
-		}
+		.music-toggle:active { transform: translateY(-1px) scale(1.02); }
 
-		.music-icon {
-			margin-right: 0.5rem;
-			display: inline-block;
-			transition: transform 0.3s ease;
-		}
-
-		.music-toggle:hover .music-icon {
-			transform: scale(1.2);
-		}
+		.music-icon { margin-right: 0.5rem; display: inline-block; transition: transform 0.3s ease; }
+		.music-toggle:hover .music-icon { transform: scale(1.2); }
 
 		/* Volume Control */
 		.volume-control {
@@ -184,72 +180,52 @@
 			transform: translateX(-100px);
 			transition: all 0.5s ease;
 		}
+		.volume-control.visible { opacity: 1; transform: translateX(0); }
 
-		.volume-control.visible {
-			opacity: 1;
-			transform: translateX(0);
-		}
-
-		.volume-label {
-			color: #c084fc;
-			font-size: 0.9rem;
-			font-weight: 600;
-			text-align: center;
-		}
+		.volume-label { color: #c084fc; font-size: 0.9rem; font-weight: 600; text-align: center; }
 
 		.volume-slider-container {
 			position: relative;
 			width: 60px;
 			height: 200px;
-			background: rgba(139, 92, 246, 0.1);
-			border: 2px solid rgba(139, 92, 246, 0.3);
+			background: rgba(139, 92, 246, 0.14);
+			border: 2px solid rgba(139, 92, 246, 0.32);
 			border-radius: 30px;
 			backdrop-filter: blur(10px);
 			overflow: hidden;
+			touch-action: none;
 		}
 
-		.volume-slider {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: transparent;
-			-webkit-appearance: slider-vertical;
-			appearance: none;
-			cursor: pointer;
-			writing-mode: bt-lr;
-			outline: none;
-			opacity: 0; /* Hide any native visuals (dot/track/blue line) */
-		}
-
+		/* Hidden native slider; we handle dragging */
+		.volume-slider { position: absolute; inset: 0; opacity: 0; pointer-events: none; -webkit-appearance: none; appearance: none; }
 		.volume-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 0; height: 0; }
 		.volume-slider::-moz-range-thumb { width: 0; height: 0; border: none; }
 		.volume-slider::-webkit-slider-runnable-track { background: transparent; border: 0; }
 		.volume-slider::-moz-range-track { background: transparent; border: 0; }
 
+		/* Yellow shiny star knob */
 		.volume-star {
 			position: absolute;
-			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
-			width: 20px;
-			height: 20px;
-			background: linear-gradient(45deg, #8b5cf6, #a855f7);
+			width: 22px;
+			height: 22px;
+			background: radial-gradient(circle at 35% 35%, #fff7c7 0%, #ffe666 40%, #ffcc33 60%, #ffb300 100%);
 			clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-			transition: transform 0.3s ease;
-			box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+			box-shadow: 0 0 12px rgba(255, 230, 100, 0.85), 0 0 28px rgba(255, 204, 51, 0.45);
+			animation: starPulse 1.6s ease-in-out infinite;
 			pointer-events: none;
 		}
+		@keyframes starPulse { 0%,100% { filter: drop-shadow(0 0 6px rgba(255,204,51,0.6)); } 50% { filter: drop-shadow(0 0 14px rgba(255,220,120,0.9)); } }
 
 		.volume-fill {
 			position: absolute;
 			bottom: 0;
 			left: 0;
 			width: 100%;
-			background: linear-gradient(to top, rgba(139, 92, 246, 0.5), rgba(168, 85, 247, 0.85));
+			background: linear-gradient(to top, rgba(139, 92, 246, 0.55), rgba(168, 85, 247, 0.9));
 			border-radius: 0 0 28px 28px;
-			transition: height 0.3s ease;
+			transition: height 0.18s ease;
 		}
 
 		/* Main Content (hidden initially) */
@@ -258,11 +234,7 @@
 			transform: translateY(100px);
 			transition: opacity 1.5s ease, transform 1.5s ease;
 		}
-
-		.main-content.visible {
-			opacity: 1;
-			transform: translateY(0);
-		}
+		.main-content.visible { opacity: 1; transform: translateY(0); }
 
 		/* Constellation lines */
 		.constellation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
@@ -301,26 +273,28 @@
 			font-size: 3.2rem; background: linear-gradient(45deg, #8b5cf6, #a855f7, #c084fc);
 			-webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 			margin-bottom: 1rem; text-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+			text-wrap: balance;
 		}
-		.hero p { font-size: 1.2rem; color: #c084fc; margin-bottom: 2rem; }
+		.hero p { font-size: 1.2rem; color: #c084fc; margin-bottom: 2rem; text-wrap: pretty; }
 
 		/* Scroll indicator */
-		.scroll-indicator {
-			display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: #8b5cf6;
-			animation: bounce 2s infinite; margin-top: 1rem;
-		}
+		.scroll-indicator { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: #8b5cf6; animation: bounce 2s infinite; margin-top: 1rem; }
 		@keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }
 
 		/* Sections */
 		.content-section {
 			max-width: 860px; width: 100%; margin: 1.5rem 0; padding: 1.5rem;
-			background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3);
+			background: rgba(139, 92, 246, 0.10); border: 1px solid rgba(139, 92, 246, 0.30);
 			border-radius: 20px; backdrop-filter: blur(10px);
 			opacity: 0; transform: translateY(50px); transition: all 0.6s ease; will-change: transform, opacity;
+			overflow: hidden;
 		}
 		.content-section.visible { opacity: 1; transform: translateY(0); }
-		.content-section h2 { color: #a855f7; margin-bottom: 1rem; font-size: 1.8rem; text-align: center; }
-		.content-section p { line-height: 1.8; color: #e0e0e0; margin-bottom: 1rem; }
+		.content-section h2 { color: #a855f7; margin-bottom: 1rem; font-size: 1.8rem; text-align: center; text-wrap: balance; }
+		.content-section p, .content-section li {
+			line-height: 1.85; color: #e6e3ee; margin-bottom: 1rem;
+			overflow-wrap: anywhere; word-break: normal; hyphens: auto; text-wrap: pretty;
+		}
 		ul { padding-left: 1.2rem; }
 
 		/* Game cards with "See more" */
@@ -332,10 +306,10 @@
 			overflow: hidden;
 		}
 		.game-item:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(124,58,237,0.22); }
-		.game-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-		.game-title { font-weight: 800; color: #efe7ff; letter-spacing: 0.01em; }
+		.game-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+		.game-title { font-weight: 800; color: #efe7ff; letter-spacing: 0.01em; min-width: 0; text-wrap: pretty; }
 		.stars-text { display: inline-block; background: linear-gradient(90deg, #ffd166, #f9a826); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 10px rgba(249,168,38,0.25); font-weight: 800; }
-		.game-actions { display: flex; align-items: center; gap: 8px; }
+		.game-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 
 		.see-more {
 			position: relative; appearance: none; border: 0; padding: 10px 14px; border-radius: 999px;
@@ -364,11 +338,7 @@
 			max-height: 520px; opacity: 1; transform: translateY(0); padding-top: 10px; filter: saturate(1.05);
 			animation: glowPulse 650ms ease;
 		}
-		@keyframes glowPulse {
-			0% { box-shadow: 0 0 0 rgba(168,85,247,0); }
-			40% { box-shadow: 0 0 24px rgba(168,85,247,0.25); }
-			100% { box-shadow: 0 0 0 rgba(168,85,247,0); }
-		}
+		@keyframes glowPulse { 0% { box-shadow: 0 0 0 rgba(168,85,247,0); } 40% { box-shadow: 0 0 24px rgba(168,85,247,0.25); } 100% { box-shadow: 0 0 0 rgba(168,85,247,0); } }
 
 		/* Floating particles */
 		.particle { position: fixed; width: 4px; height: 4px; background: #8b5cf6; border-radius: 50%; pointer-events: none; z-index: 5; animation: float 6s infinite linear; }
@@ -432,7 +402,7 @@
 		<div class="menu-stars" id="menuStars"></div>
 		<div class="menu-content">
 			<h1 class="menu-title">Nova</h1>
-			<p class="menu-subtitle">A website made with... Stars and Time.</p>
+			<p class="menu-subtitle">Welcome to my digital universe</p>
 			<button class="music-toggle" id="musicToggle">
 				<span class="music-icon">♪</span>
 				Enter The Galaxy
@@ -443,7 +413,7 @@
 	<!-- Volume Control -->
 	<div class="volume-control" id="volumeControl">
 		<div class="volume-label">Volume</div>
-		<div class="volume-slider-container">
+		<div class="volume-slider-container" id="volumeContainer" aria-label="Volume">
 			<div class="volume-fill" id="volumeFill"></div>
 			<div class="volume-star" id="volumeStar"></div>
 			<input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50" orient="vertical">
@@ -534,7 +504,7 @@
 	</div>
 
 	<script>
-		// ===== Canvas Starfield (fixed), Planets (world space, scroll with page), Repulsion =====
+		// ===== Canvas Starfield (fixed), Planets (world space), Repulsion =====
 		(function initStarfield() {
 			const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 			const canvas = document.getElementById('starfield');
@@ -545,9 +515,9 @@
 			let planets = [];
 			let animationFrame = null;
 
-			// Mouse "shield" much smaller
+			// Mouse shield small
 			const mouse = { x: -9999, y: -9999, active: false };
-			const shield = { baseRadius: 28, maxRadius: 52, gradient: null };
+			const shield = { baseRadius: 26, maxRadius: 44, gradient: null };
 
 			function resize() {
 				vw = window.innerWidth;
@@ -556,14 +526,16 @@
 				canvas.height = Math.floor(vh * dpr);
 				canvas.style.width = vw + 'px';
 				canvas.style.height = vh + 'px';
-				ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+				// Ensure transform is exactly device-pixel scaling (fixes top-left clustering)
+				if (ctx.resetTransform) ctx.resetTransform();
+				ctx.scale(dpr, dpr);
 				buildShieldGradient();
 			}
 
 			function buildShieldGradient() {
 				const r = shield.maxRadius;
 				const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
-				grad.addColorStop(0, 'rgba(168,85,247,0.22)');
+				grad.addColorStop(0, 'rgba(168,85,247,0.20)');
 				grad.addColorStop(0.6, 'rgba(168,85,247,0.10)');
 				grad.addColorStop(1, 'rgba(168,85,247,0)');
 				shield.gradient = grad;
@@ -592,7 +564,7 @@
 				});
 			}
 
-			// Planets in world coordinates (scroll with page)
+			// Planets in world coordinates
 			let worldWidth = 0;
 			let worldHeight = 0;
 
@@ -607,20 +579,26 @@
 				];
 			}
 
-			function spawnPlanets() {
+			function spawnPlanets(initial = false) {
 				worldWidth = document.documentElement.clientWidth;
 				worldHeight = Math.max(document.body.scrollHeight, window.innerHeight);
 				const anchors = sectionAnchors();
-				planets = anchors.map((a, idx) => {
-					const rect = a.el.getBoundingClientRect();
-					const worldTop = rect.top + window.scrollY;
-					const sectionHeight = a.el.offsetHeight || 400;
-					const y = worldTop + Math.random() * (sectionHeight * 0.6) + sectionHeight * 0.2;
-					const x = Math.max(a.radius + 10, Math.min(worldWidth - a.radius - 10, (worldWidth / (anchors.length + 1)) * (idx + 1) + (Math.random() * 120 - 60)));
-					// Slower velocities
-					const speedRange = 0.25;
-					return createPlanet(x, y, a.radius, a.colors, speedRange);
-				});
+
+				if (initial || planets.length === 0) {
+					planets = anchors.map((a, idx) => {
+						const rect = a.el.getBoundingClientRect();
+						const worldTop = rect.top + window.scrollY;
+						const sectionHeight = a.el.offsetHeight || 400;
+						const y = worldTop + Math.random() * (sectionHeight * 0.6) + sectionHeight * 0.2;
+						const x = Math.max(a.radius + 10, Math.min(worldWidth - a.radius - 10, (worldWidth / (anchors.length + 1)) * (idx + 1) + (Math.random() * 120 - 60)));
+						return createPlanet(x, y, a.radius, a.colors, 0.25);
+					});
+				} else {
+					for (let p of planets) {
+						p.x = Math.max(p.radius, Math.min(worldWidth - p.radius, p.x));
+						p.y = Math.max(p.radius, Math.min(worldHeight - p.radius, p.y));
+					}
+				}
 			}
 
 			function createPlanet(x, y, radius, [c1, c2], speedRange) {
@@ -639,11 +617,11 @@
 				const dx = star.x - mouse.x;
 				const dy = star.y - mouse.y;
 				const distSq = dx * dx + dy * dy;
-				const radius = shield.baseRadius + (1 - star.depth) * 24;
+				const radius = shield.baseRadius + (1 - star.depth) * 22;
 				const rSq = radius * radius;
 				if (distSq < rSq && distSq > 0.0001) {
 					const dist = Math.sqrt(distSq);
-					const force = Math.min(2.0, 36 / (dist + 10));
+					const force = Math.min(1.8, 34 / (dist + 10));
 					const nx = dx / dist;
 					const ny = dy / dist;
 					star.vx += nx * force * 0.22;
@@ -670,7 +648,6 @@
 			}
 
 			function updatePlanets() {
-				// Walls in world space
 				for (let p of planets) {
 					p.x += p.vx;
 					p.y += p.vy;
@@ -682,41 +659,29 @@
 					if (p.y + p.radius >= worldHeight && p.vy > 0) { p.vy *= -1; p.spinSpeed *= -1; }
 				}
 
-				// Planet–planet elastic collisions (approx, equal density)
 				for (let i = 0; i < planets.length; i++) {
 					for (let j = i + 1; j < planets.length; j++) {
 						const a = planets[i], b = planets[j];
-						const dx = b.x - a.x;
-						const dy = b.y - a.y;
-						const dist = Math.hypot(dx, dy);
-						const minDist = a.radius + b.radius;
+						const dx = b.x - a.x, dy = b.y - a.y;
+						const dist = Math.hypot(dx, dy), minDist = a.radius + b.radius;
 						if (dist > 0 && dist < minDist) {
-							// Push them apart
 							const overlap = (minDist - dist) + 0.5;
 							const nx = dx / dist, ny = dy / dist;
-							a.x -= nx * overlap * 0.5;
-							a.y -= ny * overlap * 0.5;
-							b.x += nx * overlap * 0.5;
-							b.y += ny * overlap * 0.5;
+							a.x -= nx * overlap * 0.5; a.y -= ny * overlap * 0.5;
+							b.x += nx * overlap * 0.5; b.y += ny * overlap * 0.5;
 
-							// Relative velocity along normal
-							const rvx = b.vx - a.vx;
-							const rvy = b.vy - a.vy;
+							const rvx = b.vx - a.vx, rvy = b.vy - a.vy;
 							const velAlongNormal = rvx * nx + rvy * ny;
 							if (velAlongNormal < 0) {
-								// Elastic impulse for equal density (mass proportional to area)
-								const ma = a.mass, mb = b.mass;
-								const e = 0.98; // restitution
+								const ma = a.mass, mb = b.mass, e = 0.98;
 								const jImpulse = -(1 + e) * velAlongNormal / (1/ma + 1/mb);
 								const jx = jImpulse * nx, jy = jImpulse * ny;
 								a.vx -= jx / ma; a.vy -= jy / ma;
 								b.vx += jx / mb; b.vy += jy / mb;
 
-								// Spin kick
 								const spinKick = (Math.abs(jImpulse) / 5000);
 								a.spinSpeed += (Math.random() < 0.5 ? -1 : 1) * spinKick;
 								b.spinSpeed -= (Math.random() < 0.5 ? -1 : 1) * spinKick;
-								// Clamp spin
 								a.spinSpeed = Math.max(-0.02, Math.min(0.02, a.spinSpeed));
 								b.spinSpeed = Math.max(-0.02, Math.min(0.02, b.spinSpeed));
 							}
@@ -743,20 +708,14 @@
 					ctx.fill();
 				}
 
-				// Planets: convert world y to viewport y by subtracting scrollY
+				// Planets (world -> viewport)
 				const scrollY = window.scrollY || window.pageYOffset || 0;
 				ctx.globalAlpha = 0.95;
 				for (let p of planets) {
-					const pvx = p.x;
-					const pvy = p.y - scrollY;
-
-					// Skip drawing if far offscreen for perf
+					const pvx = p.x, pvy = p.y - scrollY;
 					if (pvy < -p.radius * 2 || pvy > vh + p.radius * 2) continue;
 
-					const grad = ctx.createRadialGradient(
-						pvx - p.radius * 0.4, pvy - p.radius * 0.4, p.radius * 0.1,
-						pvx, pvy, p.radius
-					);
+					const grad = ctx.createRadialGradient(pvx - p.radius * 0.4, pvy - p.radius * 0.4, p.radius * 0.1, pvx, pvy, p.radius);
 					grad.addColorStop(0, p.c1);
 					grad.addColorStop(1, p.c2);
 					ctx.fillStyle = grad;
@@ -764,7 +723,6 @@
 					ctx.arc(pvx, pvy, p.radius, 0, Math.PI * 2);
 					ctx.fill();
 
-					// ring highlight
 					ctx.save();
 					ctx.translate(pvx, pvy);
 					ctx.rotate(p.spin);
@@ -775,7 +733,6 @@
 					ctx.stroke();
 					ctx.restore();
 
-					// halo
 					const halo = ctx.createRadialGradient(pvx, pvy, p.radius * 0.9, pvx, pvy, p.radius * 1.5);
 					halo.addColorStop(0, 'rgba(255,255,255,0)');
 					halo.addColorStop(1, 'rgba(139,92,246,0.12)');
@@ -814,18 +771,14 @@
 
 			function onMouseMove(e) { handlePointer(e.clientX, e.clientY); }
 			function onMouseLeave() { mouse.active = false; mouse.x = -9999; mouse.y = -9999; }
-			function onTouch(e) {
-				if (e.touches && e.touches.length) {
-					const t = e.touches[0];
-					handlePointer(t.clientX, t.clientY);
-				}
-			}
+			function onTouch(e) { if (e.touches && e.touches.length) { const t = e.touches[0]; handlePointer(t.clientX, t.clientY); } }
 			function onTouchEnd() { onMouseLeave(); }
 
-			function start() {
+			function start(initial = false) {
+				dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
 				resize();
-				spawnStars();
-				spawnPlanets();
+				if (initial) spawnStars();
+				spawnPlanets(initial);
 				if (!prefersReduced) {
 					cancelAnimationFrame(animationFrame);
 					animationFrame = requestAnimationFrame(tick);
@@ -835,9 +788,7 @@
 				}
 			}
 
-			window.addEventListener('resize', () => {
-				start();
-			}, { passive: true });
+			window.addEventListener('resize', () => { start(false); }, { passive: true });
 
 			// Track mouse on window
 			window.addEventListener('mousemove', onMouseMove, { passive: true });
@@ -846,11 +797,16 @@
 			window.addEventListener('touchmove', onTouch, { passive: true });
 			window.addEventListener('touchend', onTouchEnd, { passive: true });
 
-			// Reposition planets if content heights change (e.g., see-more)
-			const ro = new ResizeObserver(() => { spawnPlanets(); });
+			// Debounced layout watcher to avoid planet jitter on "See more"
+			let layoutTimer = null;
+			function scheduleWorldRecalc() {
+				if (layoutTimer) clearTimeout(layoutTimer);
+				layoutTimer = setTimeout(() => { spawnPlanets(false); }, 240);
+			}
+			const ro = new ResizeObserver(scheduleWorldRecalc);
 			ro.observe(document.body);
 
-			start();
+			start(true);
 		})();
 
 		// Create menu stars
@@ -898,24 +854,55 @@
 			}, 500);
 		}
 
-		// Volume control functionality
+		// Volume control functionality (custom, precise and scroll-friendly)
 		function setupVolumeControl() {
-			const volumeSlider = document.getElementById('volumeSlider');
-			const volumeFill = document.getElementById('volumeFill');
-			const volumeStar = document.getElementById('volumeStar');
-			const backgroundMusic = document.getElementById('backgroundMusic');
+			const container = document.getElementById('volumeContainer');
+			const slider = document.getElementById('volumeSlider');
+			const fill = document.getElementById('volumeFill');
+			const star = document.getElementById('volumeStar');
+			const audio = document.getElementById('backgroundMusic');
 
-			function updateVolume() {
-				const volume = volumeSlider.value / 100;
-				backgroundMusic.volume = volume;
-				volumeFill.style.height = volumeSlider.value + '%';
+			function setFromRatio(r) {
+				const clamped = Math.max(0, Math.min(1, r));
+				const value = Math.round(clamped * 100);
+				slider.value = String(value);
+				audio.volume = clamped;
+				fill.style.height = value + '%';
 
-				const rotation = (volumeSlider.value - 50) * 3.6;
-				volumeStar.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+				const rect = container.getBoundingClientRect();
+				const starY = rect.bottom - clamped * rect.height;
+				star.style.top = (starY - rect.top) + 'px';
 			}
 
-			volumeSlider.addEventListener('input', updateVolume);
-			updateVolume();
+			function handlePointer(clientY) {
+				const rect = container.getBoundingClientRect();
+				const ratio = (rect.bottom - clientY) / rect.height;
+				setFromRatio(ratio);
+			}
+
+			let dragging = false;
+
+			container.addEventListener('pointerdown', (e) => {
+				dragging = true;
+				container.setPointerCapture(e.pointerId);
+				handlePointer(e.clientY);
+				e.preventDefault();
+			});
+			container.addEventListener('pointermove', (e) => {
+				if (!dragging) return;
+				handlePointer(e.clientY);
+				e.preventDefault();
+			});
+			container.addEventListener('pointerup', (e) => {
+				dragging = false;
+				try { container.releasePointerCapture(e.pointerId); } catch {}
+				e.preventDefault();
+			});
+			container.addEventListener('pointercancel', () => { dragging = false; });
+
+			function init() { setFromRatio(parseInt(slider.value, 10) / 100); }
+			init();
+			window.addEventListener('resize', () => init(), { passive: true });
 		}
 
 		// Intersection Observer for scroll animations
@@ -957,8 +944,9 @@
 			}, { passive: true });
 		}
 
-		// See more toggles with smooth, satisfying animations
+		// See more toggles; notify starfield to recalc world height (debounced)
 		function setupSeeMore() {
+			const notifyLayout = () => { window.dispatchEvent(new CustomEvent('content-resize-request')); };
 			document.querySelectorAll('.see-more').forEach(btn => {
 				const moreId = btn.getAttribute('aria-controls');
 				const panel = document.getElementById(moreId);
@@ -977,20 +965,21 @@
 					const expanded = btn.getAttribute('aria-expanded') === 'true';
 					btn.setAttribute('aria-expanded', String(!expanded));
 					panel.classList.toggle('open', !expanded);
-
 					btn.firstChild.nodeValue = !expanded ? 'See less ' : 'See more ';
-
-					if (!expanded) {
-						setTimeout(() => {
-							panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-						}, 60);
-					}
+					setTimeout(notifyLayout, 20);
+					setTimeout(notifyLayout, 520);
 				}
 
 				btn.addEventListener('click', toggle);
 				btn.addEventListener('keydown', (e) => {
 					if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
 				});
+			});
+
+			let debounceTimer = null;
+			window.addEventListener('content-resize-request', () => {
+				clearTimeout(debounceTimer);
+				debounceTimer = setTimeout(() => { window.dispatchEvent(new Event('resize')); }, 220);
 			});
 		}
 
@@ -1006,7 +995,7 @@
 			});
 		}
 
-		// Music toggle and menu transition with FULLSCREEN
+		// Music toggle and menu transition
 		function setupMenuTransition() {
 			const musicToggle = document.getElementById('musicToggle');
 			const mainMenu = document.getElementById('mainMenu');
@@ -1015,10 +1004,8 @@
 			const backgroundMusic = document.getElementById('backgroundMusic');
 
 			musicToggle.addEventListener('click', async () => {
-				// Ripple
 				const rect = musicToggle.getBoundingClientRect();
-				const x = rect.width / 2;
-				const y = rect.height / 2;
+				const x = rect.width / 2, y = rect.height / 2;
 				const circle = document.createElement('span');
 				circle.className = 'ripple';
 				circle.style.left = x + 'px';
@@ -1026,31 +1013,19 @@
 				musicToggle.appendChild(circle);
 				setTimeout(() => circle.remove(), 650);
 
-				// Request fullscreen
 				try {
-					if (document.documentElement.requestFullscreen) {
-						await document.documentElement.requestFullscreen();
-					} else if (document.documentElement.webkitRequestFullscreen) {
-						await document.documentElement.webkitRequestFullscreen();
-					} else if (document.documentElement.msRequestFullscreen) {
-						await document.documentElement.msRequestFullscreen();
-					}
-				} catch (err) {
-					console.log('Fullscreen not supported or denied');
-				}
+					if (document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen();
+					else if (document.documentElement.webkitRequestFullscreen) await document.documentElement.webkitRequestFullscreen();
+					else if (document.documentElement.msRequestFullscreen) await document.documentElement.msRequestFullscreen();
+				} catch {}
 
-				// Start music with fade in
 				backgroundMusic.volume = 0;
-				backgroundMusic.play().catch(e => console.log('Audio play failed:', e));
+				backgroundMusic.play().catch(()=>{});
 				const fadeIn = setInterval(() => {
-					if (backgroundMusic.volume < 0.5) {
-						backgroundMusic.volume += 0.01;
-					} else {
-						clearInterval(fadeIn);
-					}
+					if (backgroundMusic.volume < 0.5) backgroundMusic.volume += 0.01;
+					else clearInterval(fadeIn);
 				}, 50);
 
-				// Hide menu and show content
 				mainMenu.classList.add('hidden');
 				setTimeout(() => {
 					mainContent.classList.add('visible');
@@ -1067,7 +1042,6 @@
 			});
 		}
 
-		// Initialize menu
 		document.addEventListener('DOMContentLoaded', () => {
 			createMenuStars();
 			setupMenuTransition();
@@ -1075,3 +1049,4 @@
 	</script>
 </body>
 </html>
+```
