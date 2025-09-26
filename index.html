@@ -139,7 +139,7 @@
 			transition: all 0.3s ease;
 			backdrop-filter: blur(10px);
 			overflow: hidden;
-			opacity: 0;
+			opactity: 0;
 			animation: menuFadeIn 2s ease 1.5s forwards;
 		}
 
@@ -370,27 +370,254 @@
 			filter: blur(4px); opacity: 0.9; pointer-events: none;
 		}
 
+		/* Back to Menu Button */
+		.back-to-menu {
+			position: fixed;
+			bottom: 2rem;
+			left: 50%;
+			transform: translateX(-50%);
+			z-index: 1000;
+			padding: 0.8rem 1.5rem;
+			border-radius: 50px;
+			background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(168, 85, 247, 0.2));
+			border: 2px solid rgba(139, 92, 246, 0.5);
+			color: #ffffff;
+			font-size: 1rem;
+			font-weight: 700;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			backdrop-filter: blur(10px);
+			opacity: 0;
+			visibility: hidden;
+			transform: translateX(-50%) translateY(20px);
+			transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		}
+		
+		.back-to-menu.visible {
+			opacity: 1;
+			visibility: visible;
+			transform: translateX(-50%) translateY(0);
+		}
+		
+		.back-to-menu:hover {
+			transform: translateX(-50%) translateY(-3px) scale(1.05);
+			box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+			background: linear-gradient(135deg, rgba(139, 92, 246, 0.4), rgba(168, 85, 247, 0.3));
+		}
+
+		/* Color Picker Button */
+		.color-picker-btn {
+			position: fixed;
+			bottom: 2rem;
+			right: 2rem;
+			z-index: 1000;
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			background: linear-gradient(135deg, #8b5cf6, #a855f7);
+			border: 2px solid rgba(255, 255, 255, 0.3);
+			color: #ffffff;
+			font-size: 1.5rem;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			backdrop-filter: blur(10px);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+			transform: translateY(20px);
+			opacity: 0;
+			visibility: hidden;
+			transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		}
+		
+		.color-picker-btn.visible {
+			transform: translateY(0);
+			opacity: 1;
+			visibility: visible;
+		}
+		
+		.color-picker-btn:hover {
+			transform: translateY(-3px) scale(1.1);
+			box-shadow: 0 0 25px rgba(139, 92, 246, 0.5);
+		}
+		
+		/* Color Picker Panel */
+		.color-picker-panel {
+			position: fixed;
+			bottom: 8rem;
+			right: 2rem;
+			z-index: 1001;
+			width: 200px;
+			background: rgba(139, 92, 246, 0.2);
+			border: 1px solid rgba(139, 92, 246, 0.5);
+			border-radius: 15px;
+			padding: 1rem;
+			backdrop-filter: blur(10px);
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+			transform: translateY(20px);
+			opacity: 0;
+			visibility: hidden;
+			transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		}
+		
+		.color-picker-panel.visible {
+			transform: translateY(0);
+			opacity: 1;
+			visibility: visible;
+		}
+		
+		.color-picker-panel h3 {
+			color: #c084fc;
+			margin-bottom: 1rem;
+			text-align: center;
+		}
+		
+		.color-options {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 0.75rem;
+		}
+		
+		.color-option {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			cursor: pointer;
+			transition: transform 0.2s ease;
+			border: 2px solid rgba(255, 255, 255, 0.3);
+		}
+		
+		.color-option:hover {
+			transform: scale(1.2);
+		}
+		
+		/* Color options */
+		.color-option-1 { background: linear-gradient(135deg, #1a0a2e, #0f0f23); }
+		.color-option-2 { background: linear-gradient(135deg, #0f0f23, #130a22); }
+		.color-option-3 { background: linear-gradient(135deg, #12071e, #0b0014); }
+		.color-option-4 { background: linear-gradient(135deg, #1a0a2e, #130a22); }
+		.color-option-5 { background: linear-gradient(135deg, #0f0f23, #12071e); }
+		.color-option-6 { background: linear-gradient(135deg, #130a22, #0b0014); }
+		
+		/* Footer section */
+		.footer {
+			position: relative;
+			z-index: 10;
+			text-align: center;
+			padding: 2rem;
+			margin-top: 4rem;
+			border-top: 1px solid rgba(139, 92, 246, 0.3);
+			background: rgba(139, 92, 246, 0.05);
+			backdrop-filter: blur(10px);
+			overflow: hidden;
+		}
+
+		.footer-content {
+			max-width: 860px;
+			margin: 0 auto;
+		}
+
+		.footer h2 {
+			font-size: 1.8rem;
+			color: #a855f7;
+			margin-bottom: 1rem;
+			text-wrap: balance;
+		}
+
+		.footer p {
+			color: #c084fc;
+			line-height: 1.85;
+			margin-bottom: 1.5rem;
+			text-wrap: pretty;
+		}
+
+		.footer-links {
+			display: flex;
+			justify-content: center;
+			gap: 1.5rem;
+			flex-wrap: wrap;
+		}
+
+		.footer-link {
+			color: #efe7ff;
+			text-decoration: none;
+			position: relative;
+			padding: 0.5rem 1rem;
+			border-radius: 25px;
+			background: rgba(139, 92, 246, 0.15);
+			border: 1px solid rgba(139, 92, 246, 0.3);
+			transition: all 0.3s ease;
+			overflow: hidden;
+		}
+
+		.footer-link:hover {
+			background: rgba(139, 92, 246, 0.3);
+			transform: translateY(-3px);
+			box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+		}
+
+		.footer-link::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+			transform: translateX(-100%);
+			transition: transform 0.5s ease;
+		}
+
+		.footer-link:hover::before {
+			transform: translateX(100%);
+		}
+
+		/* Options button in menu */
+		.options-btn {
+			position: absolute;
+			top: 2rem;
+			left: 2rem;
+			z-index: 1000;
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			background: linear-gradient(135deg, rgba(255, 105, 180, 0.3), rgba(255, 20, 147, 0.2));
+			border: 2px solid rgba(255, 105, 180, 0.5);
+			color: #ffffff;
+			font-size: 1.5rem;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			backdrop-filter: blur(10px);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			box-shadow: 0 0 15px rgba(255, 105, 180, 0.3);
+		}
+
+		.options-btn:hover {
+			transform: scale(1.1);
+			box-shadow: 0 0 25px rgba(255, 105, 180, 0.5);
+		}
+		
 		/* Responsive */
 		@media (max-width: 768px) {
-			.menu-title { font-size: 2.5rem; }
-			.menu-subtitle { font-size: 1.2rem; }
-			.music-toggle { font-size: 1rem; padding: 0.8rem 1.5rem; }
-			.hero h1 { font-size: 2.4rem; }
-			.hero p { font-size: 1rem; }
-			.nav { top: 1rem; right: 1rem; left: 1rem; justify-content: center; }
-			.content-section { margin: 1rem 0; padding: 1.25rem; }
-			.volume-control { top: 1rem; left: 1rem; }
-			.volume-slider-container { width: 50px; height: 150px; }
+			.back-to-menu {
+				bottom: 1rem;
+				left: 50%;
+				transform: translateX(-50%);
+				padding: 0.6rem 1.2rem;
+				font-size: 0.9rem;
+			}
+			
+			.color-picker-btn {
+				bottom: 1rem;
+				right: 1rem;
+			}
+			
+			.color-picker-panel {
+				bottom: 7rem;
+				right: 1rem;
+				width: 160px;
+			}
 		}
-
-		@media (prefers-reduced-motion: reduce) {
-			* { animation: none !important; transition: none !important; }
-			.content-section, .content-section.visible { opacity: 1 !important; transform: none !important; }
-			.rgb, .shiny-text { -webkit-text-fill-color: currentColor !important; background: none !important; }
-			.game-more { max-height: none !important; opacity: 1 !important; transform: none !important; }
-		}
-
-		@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 	</style>
 </head>
 <body>
@@ -408,6 +635,10 @@
 				Enter The Galaxy
 			</button>
 		</div>
+		<!-- Options button -->
+		<button class="options-btn" id="optionsBtn" aria-label="Options">
+			⚙️
+		</button>
 	</div>
 
 	<!-- Volume Control -->
@@ -500,6 +731,44 @@
 					<li>Roblox: <a href="https://www.roblox.com/users/2517791964/profile" target="_blank" rel="noopener">roblox.com/users/2517791964/profile</a></li>
 				</ul>
 			</section>
+
+			<!-- Footer section -->
+			<footer class="footer">
+				<div class="footer-content">
+					<h2>Explore More</h2>
+					<p>Feel free to browse through my projects and experiences. I'm always open to connecting with like-minded individuals who appreciate creativity and innovation.</p>
+					<div class="footer-links">
+						<a href="#bio" class="footer-link">About</a>
+						<a href="#games" class="footer-link">Games</a>
+						<a href="#contact" class="footer-link">Contact</a>
+						<a href="https://github.com" target="_blank" class="footer-link">GitHub</a>
+						<a href="https://twitter.com" target="_blank" class="footer-link">Twitter</a>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+
+	<!-- Back to Menu Button -->
+	<button class="back-to-menu" id="backToMenu">
+		← Back to Menu
+	</button>
+	
+	<!-- Color Picker Button -->
+	<button class="color-picker-btn" id="colorPickerBtn">
+		🎨
+	</button>
+	
+	<!-- Color Picker Panel -->
+	<div class="color-picker-panel" id="colorPickerPanel">
+		<h3>Theme Colors</h3>
+		<div class="color-options">
+			<div class="color-option color-option-1" data-theme="dark"></div>
+			<div class="color-option color-option-2" data-theme="deep"></div>
+			<div class="color-option color-option-3" data-theme="purple"></div>
+			<div class="color-option color-option-4" data-theme="blue"></div>
+			<div class="color-option color-option-5" data-theme="indigo"></div>
+			<div class="color-option color-option-6" data-theme="violet"></div>
 		</div>
 	</div>
 
@@ -1002,6 +1271,7 @@
 			const mainContent = document.getElementById('mainContent');
 			const volumeControl = document.getElementById('volumeControl');
 			const backgroundMusic = document.getElementById('backgroundMusic');
+			const optionsBtn = document.getElementById('optionsBtn');
 
 			musicToggle.addEventListener('click', async () => {
 				const rect = musicToggle.getBoundingClientRect();
@@ -1040,11 +1310,120 @@
 					setupVolumeControl();
 				}, 800);
 			});
+
+			// Options button functionality
+			optionsBtn.addEventListener('click', (e) => {
+				const rect = optionsBtn.getBoundingClientRect();
+				const x = rect.width / 2, y = rect.height / 2;
+				const circle = document.createElement('span');
+				circle.className = 'ripple';
+				circle.style.left = x + 'px';
+				circle.style.top = y + 'px';
+				optionsBtn.appendChild(circle);
+				setTimeout(() => circle.remove(), 650);
+
+				// Add your options functionality here
+				alert('Options menu would open here');
+			});
+		}
+
+		// Color changing functionality
+		function setupColorPicker() {
+			const colorPickerBtn = document.getElementById('colorPickerBtn');
+			const colorPickerPanel = document.getElementById('colorPickerPanel');
+			const backToMenu = document.getElementById('backToMenu');
+			const mainMenu = document.getElementById('mainMenu');
+			const mainContent = document.getElementById('mainContent');
+			const body = document.body;
+			
+			// Show/hide color picker panel
+			colorPickerBtn.addEventListener('click', () => {
+				colorPickerPanel.classList.toggle('visible');
+				colorPickerBtn.classList.toggle('active');
+			});
+			
+			// Close panel when clicking outside
+			document.addEventListener('click', (e) => {
+				if (!colorPickerPanel.contains(e.target) && 
+					!colorPickerBtn.contains(e.target) &&
+					colorPickerPanel.classList.contains('visible')) {
+					colorPickerPanel.classList.remove('visible');
+				}
+			});
+			
+			// Apply color themes
+			document.querySelectorAll('.color-option').forEach(option => {
+				option.addEventListener('click', () => {
+					const theme = option.getAttribute('data-theme');
+					switch(theme) {
+						case 'dark':
+							body.style.background = 
+								'radial-gradient(1200px 800px at 50% 0%, #1a0a2e 0%, rgba(26,10,46,0.6) 45%, rgba(26,10,46,0.0) 70%), linear-gradient(to bottom, #0f0f23 0%, #130a22 45%, #12071e 70%, #0b0014 100%)';
+							break;
+						case 'deep':
+							body.style.background = 
+								'radial-gradient(1200px 800px at 50% 0%, #0f0f23 0%, rgba(15,15,35,0.6) 45%, rgba(15,15,35,0.0) 70%), linear-gradient(to bottom, #1a0a2e 0%, #130a22 45%, #12071e 70%, #0b0014 100%)';
+							break;
+						case 'purple':
+							body.style.background = 
+								'radial-gradient(1200px 800px at 50% 0%, #12071e 0%, rgba(18,7,30,0.6) 45%, rgba(18,7,30,0.0) 70%), linear-gradient(to bottom, #0f0f23 0%, #130a22 45%, #12071e 70%, #0b0014 100%)';
+							break;
+						case 'blue':
+							body.style.background = 
+								'radial-gradient(1200px 800px at 50% 0%, #0b0014 0%, rgba(11,0,20,0.6) 45%, rgba(11,0,20,0.0) 70%), linear-gradient(to bottom, #0f0f23 0%, #130a22 45%, #12071e 70%, #0b0014 100%)';
+							break;
+						case 'indigo':
+							body.style.background = 
+								'radial-gradient(1200px 800px at 50% 0%, #130a22 0%, rgba(19,10,34,0.6) 45%, rgba(19,10,34,0.0) 70%), linear-gradient(to bottom, #0f0f23 0%, #130a22 45%, #12071e 70%, #0b0014 100%)';
+							break;
+						case 'violet':
+							body.style.background = 
+								'radial-gradient(1200px 800px at 50% 0%, #1a0a2e 0%, rgba(26,10,46,0.6) 45%, rgba(26,10,46,0.0) 70%), linear-gradient(to bottom, #12071e 0%, #130a22 45%, #12071e 70%, #0b0014 100%)';
+							break;
+					}
+					colorPickerPanel.classList.remove('visible');
+				});
+			});
+			
+			// Back to menu functionality
+			backToMenu.addEventListener('click', () => {
+				mainContent.classList.remove('visible');
+				mainMenu.classList.remove('hidden');
+				mainMenu.classList.add('visible');
+				colorPickerPanel.classList.remove('visible');
+				backToMenu.classList.remove('visible');
+				colorPickerBtn.classList.remove('visible');
+				
+				// Reset volume to default
+				const volumeSlider = document.getElementById('volumeSlider');
+				const volumeFill = document.getElementById('volumeFill');
+				volumeSlider.value = 50;
+				volumeFill.style.height = '50%';
+				
+				// Reset audio
+				const backgroundMusic = document.getElementById('backgroundMusic');
+				backgroundMusic.volume = 0.5;
+			});
+			
+			// Show buttons when content is visible
+			const observer = new IntersectionObserver((entries) => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting) {
+						backToMenu.classList.add('visible');
+						colorPickerBtn.classList.add('visible');
+					}
+				});
+			}, { threshold: 0.1 });
+			
+			document.querySelectorAll('.content-section').forEach(section => {
+				observer.observe(section);
+			});
 		}
 
 		document.addEventListener('DOMContentLoaded', () => {
 			createMenuStars();
 			setupMenuTransition();
+			setupColorPicker();
 		});
 	</script>
 </body>
