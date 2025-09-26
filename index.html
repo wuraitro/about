@@ -16,6 +16,17 @@
 			position: relative;
 		}
 
+		/* Starfield Canvas (behind everything) */
+		#starfield {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			pointer-events: none;
+			z-index: 0;
+		}
+
 		/* Main Menu Overlay */
 		.main-menu {
 			position: fixed;
@@ -204,29 +215,18 @@
 			width: 100%;
 			height: 100%;
 			background: transparent;
-			-webkit-appearance: none;
+			-webkit-appearance: slider-vertical;
 			appearance: none;
 			cursor: pointer;
 			writing-mode: bt-lr;
-			-webkit-appearance: slider-vertical;
+			outline: none;
+			opacity: 0; /* Hide any native visuals (dot/track/blue line) */
 		}
 
-		.volume-slider::-webkit-slider-thumb {
-			-webkit-appearance: none;
-			appearance: none;
-			width: 0;
-			height: 0;
-			background: transparent;
-			cursor: pointer;
-		}
-
-		.volume-slider::-moz-range-thumb {
-			width: 0;
-			height: 0;
-			background: transparent;
-			cursor: pointer;
-			border: none;
-		}
+		.volume-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 0; height: 0; }
+		.volume-slider::-moz-range-thumb { width: 0; height: 0; border: none; }
+		.volume-slider::-webkit-slider-runnable-track { background: transparent; border: 0; }
+		.volume-slider::-moz-range-track { background: transparent; border: 0; }
 
 		.volume-star {
 			position: absolute;
@@ -239,6 +239,7 @@
 			clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
 			transition: transform 0.3s ease;
 			box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+			pointer-events: none;
 		}
 
 		.volume-fill {
@@ -246,7 +247,7 @@
 			bottom: 0;
 			left: 0;
 			width: 100%;
-			background: linear-gradient(to top, rgba(139, 92, 246, 0.3), rgba(168, 85, 247, 0.6));
+			background: linear-gradient(to top, rgba(139, 92, 246, 0.5), rgba(168, 85, 247, 0.85));
 			border-radius: 0 0 28px 28px;
 			transition: height 0.3s ease;
 		}
@@ -262,13 +263,6 @@
 			opacity: 1;
 			transform: translateY(0);
 		}
-
-		/* Animated background stars */
-		.stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-		.star { position: absolute; background: #ffffff; border-radius: 50%; animation: twinkle 3s infinite; will-change: transform, opacity; }
-		.star:nth-child(odd) { animation-delay: 1s; }
-		.star:nth-child(3n) { animation-delay: 2s; }
-		@keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
 
 		/* Constellation lines */
 		.constellation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
@@ -430,6 +424,9 @@
 	</style>
 </head>
 <body>
+	<!-- GPU Starfield -->
+	<canvas id="starfield" aria-hidden="true"></canvas>
+
 	<!-- Main Menu -->
 	<div class="main-menu" id="mainMenu">
 		<div class="menu-stars" id="menuStars"></div>
@@ -438,7 +435,7 @@
 			<p class="menu-subtitle">Welcome to my digital universe</p>
 			<button class="music-toggle" id="musicToggle">
 				<span class="music-icon">♪</span>
-				Enter the Cosmos
+				Enter The Galaxy
 			</button>
 		</div>
 	</div>
@@ -460,8 +457,7 @@
 
 	<!-- Main Content (hidden initially) -->
 	<div class="main-content" id="mainContent">
-		<!-- Animated background elements -->
-		<div class="stars" id="stars"></div>
+		<!-- Constellation layer remains for extra depth -->
 		<div class="constellation" id="constellation"></div>
 
 		<!-- Navigation -->
@@ -538,6 +534,325 @@
 	</div>
 
 	<script>
+		// ===== Canvas Starfield (fixed), Planets (world space, scroll with page), Repulsion =====
+		(function initStarfield() {
+			const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			const canvas = document.getElementById('starfield');
+			const ctx = canvas.getContext('2d', { alpha: true });
+			let dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+			let vw = 0, vh = 0;
+			let stars = [];
+			let planets = [];
+			let animationFrame = null;
+
+			// Mouse "shield" much smaller
+			const mouse = { x: -9999, y: -9999, active: false };
+			const shield = { baseRadius: 28, maxRadius: 52, gradient: null };
+
+			function resize() {
+				vw = window.innerWidth;
+				vh = window.innerHeight;
+				canvas.width = Math.floor(vw * dpr);
+				canvas.height = Math.floor(vh * dpr);
+				canvas.style.width = vw + 'px';
+				canvas.style.height = vh + 'px';
+				ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+				buildShieldGradient();
+			}
+
+			function buildShieldGradient() {
+				const r = shield.maxRadius;
+				const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
+				grad.addColorStop(0, 'rgba(168,85,247,0.22)');
+				grad.addColorStop(0.6, 'rgba(168,85,247,0.10)');
+				grad.addColorStop(1, 'rgba(168,85,247,0)');
+				shield.gradient = grad;
+			}
+
+			function spawnStars() {
+				const baseCount = vw < 768 ? 220 : 380;
+				const extra = Math.floor((vw * vh) / 14000);
+				const count = Math.min(900, baseCount + extra);
+
+				stars = Array.from({ length: count }, () => {
+					const depth = Math.random();
+					const size = 0.8 + 2.2 * (1 - depth);
+					const speed = 0.02 + 0.18 * (1 - depth);
+					return {
+						x: Math.random() * vw,
+						y: Math.random() * vh,
+						vx: (Math.random() * 0.6 - 0.3) * speed,
+						vy: (Math.random() * 0.6 - 0.3) * speed,
+						size,
+						alpha: 0.6 + Math.random() * 0.6,
+						twPhase: Math.random() * Math.PI * 2,
+						twSpeed: 0.01 + Math.random() * 0.025,
+						depth
+					};
+				});
+			}
+
+			// Planets in world coordinates (scroll with page)
+			let worldWidth = 0;
+			let worldHeight = 0;
+
+			function sectionAnchors() {
+				const secBio = document.getElementById('bio');
+				const secGames = document.getElementById('games');
+				const secContact = document.getElementById('contact');
+				return [
+					{ el: secBio,    radius: 60, colors: ['#5ee7ff', '#1e90ff'] },
+					{ el: secGames,  radius: 40, colors: ['#ffd166', '#fca311'] },
+					{ el: secContact,radius: 28, colors: ['#c084fc', '#8b5cf6'] },
+				];
+			}
+
+			function spawnPlanets() {
+				worldWidth = document.documentElement.clientWidth;
+				worldHeight = Math.max(document.body.scrollHeight, window.innerHeight);
+				const anchors = sectionAnchors();
+				planets = anchors.map((a, idx) => {
+					const rect = a.el.getBoundingClientRect();
+					const worldTop = rect.top + window.scrollY;
+					const sectionHeight = a.el.offsetHeight || 400;
+					const y = worldTop + Math.random() * (sectionHeight * 0.6) + sectionHeight * 0.2;
+					const x = Math.max(a.radius + 10, Math.min(worldWidth - a.radius - 10, (worldWidth / (anchors.length + 1)) * (idx + 1) + (Math.random() * 120 - 60)));
+					// Slower velocities
+					const speedRange = 0.25;
+					return createPlanet(x, y, a.radius, a.colors, speedRange);
+				});
+			}
+
+			function createPlanet(x, y, radius, [c1, c2], speedRange) {
+				return {
+					x, y, radius, c1, c2,
+					vx: (Math.random() * speedRange + 0.05) * (Math.random() < 0.5 ? -1 : 1),
+					vy: (Math.random() * speedRange + 0.05) * (Math.random() < 0.5 ? -1 : 1),
+					spin: Math.random() * Math.PI * 2,
+					spinSpeed: (Math.random() * 0.002 + 0.001) * (Math.random() < 0.5 ? -1 : 1),
+					mass: radius * radius
+				};
+			}
+
+			function applyMouseRepulsion(star) {
+				if (!mouse.active) return;
+				const dx = star.x - mouse.x;
+				const dy = star.y - mouse.y;
+				const distSq = dx * dx + dy * dy;
+				const radius = shield.baseRadius + (1 - star.depth) * 24;
+				const rSq = radius * radius;
+				if (distSq < rSq && distSq > 0.0001) {
+					const dist = Math.sqrt(distSq);
+					const force = Math.min(2.0, 36 / (dist + 10));
+					const nx = dx / dist;
+					const ny = dy / dist;
+					star.vx += nx * force * 0.22;
+					star.vy += ny * force * 0.22;
+				}
+			}
+
+			function updateStars() {
+				for (let s of stars) {
+					s.twPhase += s.twSpeed;
+					const tw = 0.6 + 0.4 * Math.sin(s.twPhase);
+					s._alphaNow = s.alpha * tw;
+
+					s.x += s.vx;
+					s.y += s.vy;
+					s.vx *= 0.995;
+					s.vy *= 0.995;
+
+					if (s.x < -10) s.x = vw + 10;
+					if (s.x > vw + 10) s.x = -10;
+					if (s.y < -10) s.y = vh + 10;
+					if (s.y > vh + 10) s.y = -10;
+				}
+			}
+
+			function updatePlanets() {
+				// Walls in world space
+				for (let p of planets) {
+					p.x += p.vx;
+					p.y += p.vy;
+					p.spin += p.spinSpeed;
+
+					if (p.x - p.radius <= 0 && p.vx < 0) { p.vx *= -1; p.spinSpeed *= -1; }
+					if (p.x + p.radius >= worldWidth && p.vx > 0) { p.vx *= -1; p.spinSpeed *= -1; }
+					if (p.y - p.radius <= 0 && p.vy < 0) { p.vy *= -1; p.spinSpeed *= -1; }
+					if (p.y + p.radius >= worldHeight && p.vy > 0) { p.vy *= -1; p.spinSpeed *= -1; }
+				}
+
+				// Planet–planet elastic collisions (approx, equal density)
+				for (let i = 0; i < planets.length; i++) {
+					for (let j = i + 1; j < planets.length; j++) {
+						const a = planets[i], b = planets[j];
+						const dx = b.x - a.x;
+						const dy = b.y - a.y;
+						const dist = Math.hypot(dx, dy);
+						const minDist = a.radius + b.radius;
+						if (dist > 0 && dist < minDist) {
+							// Push them apart
+							const overlap = (minDist - dist) + 0.5;
+							const nx = dx / dist, ny = dy / dist;
+							a.x -= nx * overlap * 0.5;
+							a.y -= ny * overlap * 0.5;
+							b.x += nx * overlap * 0.5;
+							b.y += ny * overlap * 0.5;
+
+							// Relative velocity along normal
+							const rvx = b.vx - a.vx;
+							const rvy = b.vy - a.vy;
+							const velAlongNormal = rvx * nx + rvy * ny;
+							if (velAlongNormal < 0) {
+								// Elastic impulse for equal density (mass proportional to area)
+								const ma = a.mass, mb = b.mass;
+								const e = 0.98; // restitution
+								const jImpulse = -(1 + e) * velAlongNormal / (1/ma + 1/mb);
+								const jx = jImpulse * nx, jy = jImpulse * ny;
+								a.vx -= jx / ma; a.vy -= jy / ma;
+								b.vx += jx / mb; b.vy += jy / mb;
+
+								// Spin kick
+								const spinKick = (Math.abs(jImpulse) / 5000);
+								a.spinSpeed += (Math.random() < 0.5 ? -1 : 1) * spinKick;
+								b.spinSpeed -= (Math.random() < 0.5 ? -1 : 1) * spinKick;
+								// Clamp spin
+								a.spinSpeed = Math.max(-0.02, Math.min(0.02, a.spinSpeed));
+								b.spinSpeed = Math.max(-0.02, Math.min(0.02, b.spinSpeed));
+							}
+						}
+					}
+				}
+			}
+
+			function draw() {
+				ctx.clearRect(0, 0, vw, vh);
+
+				// Stars (fixed to viewport)
+				for (let s of stars) {
+					ctx.globalAlpha = s._alphaNow;
+					const glowR = 14 * (1 - s.depth) + 6;
+					const glow = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, glowR);
+					glow.addColorStop(0, '#ffffff');
+					glow.addColorStop(0.25, 'rgba(216,180,254,0.95)');
+					glow.addColorStop(0.6, 'rgba(168,85,247,0.35)');
+					glow.addColorStop(1, 'rgba(168,85,247,0)');
+					ctx.fillStyle = glow;
+					ctx.beginPath();
+					ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+					ctx.fill();
+				}
+
+				// Planets: convert world y to viewport y by subtracting scrollY
+				const scrollY = window.scrollY || window.pageYOffset || 0;
+				ctx.globalAlpha = 0.95;
+				for (let p of planets) {
+					const pvx = p.x;
+					const pvy = p.y - scrollY;
+
+					// Skip drawing if far offscreen for perf
+					if (pvy < -p.radius * 2 || pvy > vh + p.radius * 2) continue;
+
+					const grad = ctx.createRadialGradient(
+						pvx - p.radius * 0.4, pvy - p.radius * 0.4, p.radius * 0.1,
+						pvx, pvy, p.radius
+					);
+					grad.addColorStop(0, p.c1);
+					grad.addColorStop(1, p.c2);
+					ctx.fillStyle = grad;
+					ctx.beginPath();
+					ctx.arc(pvx, pvy, p.radius, 0, Math.PI * 2);
+					ctx.fill();
+
+					// ring highlight
+					ctx.save();
+					ctx.translate(pvx, pvy);
+					ctx.rotate(p.spin);
+					ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+					ctx.lineWidth = Math.max(1, p.radius * 0.06);
+					ctx.beginPath();
+					ctx.ellipse(0, 0, p.radius * 0.7, p.radius * 0.35, 0, 0, Math.PI * 2);
+					ctx.stroke();
+					ctx.restore();
+
+					// halo
+					const halo = ctx.createRadialGradient(pvx, pvy, p.radius * 0.9, pvx, pvy, p.radius * 1.5);
+					halo.addColorStop(0, 'rgba(255,255,255,0)');
+					halo.addColorStop(1, 'rgba(139,92,246,0.12)');
+					ctx.fillStyle = halo;
+					ctx.beginPath();
+					ctx.arc(pvx, pvy, p.radius * 1.5, 0, Math.PI * 2);
+					ctx.fill();
+				}
+
+				// Small shield visualization
+				if (mouse.active) {
+					ctx.save();
+					ctx.translate(mouse.x, mouse.y);
+					ctx.fillStyle = shield.gradient;
+					ctx.beginPath();
+					ctx.arc(0, 0, shield.maxRadius, 0, Math.PI * 2);
+					ctx.fill();
+					ctx.restore();
+				}
+			}
+
+			function tick() {
+				updateStars();
+				for (let s of stars) applyMouseRepulsion(s);
+				updatePlanets();
+				draw();
+				animationFrame = requestAnimationFrame(tick);
+			}
+
+			function handlePointer(clientX, clientY) {
+				const rect = canvas.getBoundingClientRect();
+				mouse.x = clientX - rect.left;
+				mouse.y = clientY - rect.top;
+				mouse.active = true;
+			}
+
+			function onMouseMove(e) { handlePointer(e.clientX, e.clientY); }
+			function onMouseLeave() { mouse.active = false; mouse.x = -9999; mouse.y = -9999; }
+			function onTouch(e) {
+				if (e.touches && e.touches.length) {
+					const t = e.touches[0];
+					handlePointer(t.clientX, t.clientY);
+				}
+			}
+			function onTouchEnd() { onMouseLeave(); }
+
+			function start() {
+				resize();
+				spawnStars();
+				spawnPlanets();
+				if (!prefersReduced) {
+					cancelAnimationFrame(animationFrame);
+					animationFrame = requestAnimationFrame(tick);
+				} else {
+					for (let s of stars) s._alphaNow = s.alpha;
+					draw();
+				}
+			}
+
+			window.addEventListener('resize', () => {
+				start();
+			}, { passive: true });
+
+			// Track mouse on window
+			window.addEventListener('mousemove', onMouseMove, { passive: true });
+			window.addEventListener('mouseleave', onMouseLeave, { passive: true });
+			window.addEventListener('touchstart', onTouch, { passive: true });
+			window.addEventListener('touchmove', onTouch, { passive: true });
+			window.addEventListener('touchend', onTouchEnd, { passive: true });
+
+			// Reposition planets if content heights change (e.g., see-more)
+			const ro = new ResizeObserver(() => { spawnPlanets(); });
+			ro.observe(document.body);
+
+			start();
+		})();
+
 		// Create menu stars
 		function createMenuStars() {
 			const menuStarsContainer = document.getElementById('menuStars');
@@ -552,23 +867,6 @@
 				star.style.height = size + 'px';
 				star.style.animationDelay = (Math.random() * 4).toFixed(2) + 's';
 				menuStarsContainer.appendChild(star);
-			}
-		}
-
-		// Create animated stars
-		function createStars() {
-			const starsContainer = document.getElementById('stars');
-			const numStars = 120;
-			for (let i = 0; i < numStars; i++) {
-				const star = document.createElement('div');
-				star.className = 'star';
-				star.style.left = Math.random() * 100 + '%';
-				star.style.top = Math.random() * 100 + '%';
-				const size = Math.random() * 3 + 1;
-				star.style.width = size + 'px';
-				star.style.height = size + 'px';
-				star.style.animationDelay = (Math.random() * 3).toFixed(2) + 's';
-				starsContainer.appendChild(star);
 			}
 		}
 
@@ -610,18 +908,13 @@
 			function updateVolume() {
 				const volume = volumeSlider.value / 100;
 				backgroundMusic.volume = volume;
-				
-				// Update visual fill
 				volumeFill.style.height = volumeSlider.value + '%';
-				
-				// Rotate star based on volume
-				const rotation = (volumeSlider.value - 50) * 3.6; // -180 to 180 degrees
+
+				const rotation = (volumeSlider.value - 50) * 3.6;
 				volumeStar.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
 			}
 
 			volumeSlider.addEventListener('input', updateVolume);
-			
-			// Initialize volume
 			updateVolume();
 		}
 
@@ -655,13 +948,11 @@
 			});
 		}
 
-		// Parallax effect
+		// Parallax effect (kept for constellation layer)
 		function setupParallax() {
 			window.addEventListener('scroll', () => {
 				const scrolled = window.pageYOffset || document.documentElement.scrollTop;
-				const stars = document.getElementById('stars');
 				const constellation = document.getElementById('constellation');
-				if (stars) stars.style.transform = `translateY(${scrolled * 0.5}px)`;
 				if (constellation) constellation.style.transform = `translateY(${scrolled * 0.3}px)`;
 			}, { passive: true });
 		}
@@ -673,7 +964,6 @@
 				const panel = document.getElementById(moreId);
 
 				function toggle(e) {
-					// ripple
 					const rect = btn.getBoundingClientRect();
 					const x = (e?.clientX ?? rect.width / 2) - rect.left;
 					const y = (e?.clientY ?? rect.height / 2) - rect.top;
@@ -688,10 +978,8 @@
 					btn.setAttribute('aria-expanded', String(!expanded));
 					panel.classList.toggle('open', !expanded);
 
-					// Change button text
 					btn.firstChild.nodeValue = !expanded ? 'See less ' : 'See more ';
 
-					// If opening, ensure it scrolls into view nicely
 					if (!expanded) {
 						setTimeout(() => {
 							panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -727,7 +1015,7 @@
 			const backgroundMusic = document.getElementById('backgroundMusic');
 
 			musicToggle.addEventListener('click', async () => {
-				// Add ripple effect
+				// Ripple
 				const rect = musicToggle.getBoundingClientRect();
 				const x = rect.width / 2;
 				const y = rect.height / 2;
@@ -754,8 +1042,6 @@
 				// Start music with fade in
 				backgroundMusic.volume = 0;
 				backgroundMusic.play().catch(e => console.log('Audio play failed:', e));
-				
-				// Fade in music
 				const fadeIn = setInterval(() => {
 					if (backgroundMusic.volume < 0.5) {
 						backgroundMusic.volume += 0.01;
@@ -769,8 +1055,6 @@
 				setTimeout(() => {
 					mainContent.classList.add('visible');
 					volumeControl.classList.add('visible');
-					// Initialize all the main content features
-					createStars();
 					createConstellation();
 					createParticles();
 					setupScrollAnimations();
