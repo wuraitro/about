@@ -20,8 +20,8 @@
             position: relative;
         }
 
-        /* Stars background */
-        .stars {
+        /* Enhanced Background Elements */
+        .background-elements {
             position: fixed;
             top: 0;
             left: 0;
@@ -29,19 +29,85 @@
             height: 100%;
             pointer-events: none;
             z-index: 1;
+            overflow: hidden;
         }
 
-        .star {
+        .orbit {
             position: absolute;
-            background-color: #fff;
+            border: 1px solid rgba(161, 140, 209, 0.1);
             border-radius: 50%;
-            animation: twinkle var(--duration, 5s) infinite ease-in-out;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            animation: rotate 30s linear infinite;
         }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
+        .orbit-1 {
+            width: 300px;
+            height: 300px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-duration: 40s;
+        }
+
+        .orbit-2 {
+            width: 400px;
+            height: 400px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-duration: 60s;
+        }
+
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+            z-index: 2;
+        }
+
+        .planet-1 {
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle at 30% 30%, #8A63D2, #5C6AC4);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: orbit 10s linear infinite;
+            animation-delay: 0s;
+        }
+
+        .planet-2 {
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle at 30% 30%, #a18cd1, #8A63D2);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: orbit 15s linear infinite;
+            animation-delay: 2s;
+        }
+
+        .planet-3 {
+            width: 15px;
+            height: 15px;
+            background: radial-gradient(circle at 30% 30%, #fbc2eb, #a18cd1);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: orbit 20s linear infinite;
+            animation-delay: 4s;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes orbit {
+            0% { transform: translate(-50%, -50%) rotate(0deg) translateX(150px) rotate(0deg); }
+            25% { transform: translate(-50%, -50%) rotate(90deg) translateX(150px) rotate(-90deg); }
+            50% { transform: translate(-50%, -50%) rotate(180deg) translateX(150px) rotate(-180deg); }
+            75% { transform: translate(-50%, -50%) rotate(270deg) translateX(150px) rotate(-270deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg) translateX(150px) rotate(-360deg); }
         }
 
         /* Navigation */
@@ -77,6 +143,7 @@
             position: relative;
             overflow: hidden;
             perspective: 1000px;
+            font-weight: 500;
         }
 
         .nav-btn::before {
@@ -130,6 +197,7 @@
             background: rgba(40, 30, 80, 0.4);
             border: 1px solid rgba(161, 140, 209, 0.3);
             box-shadow: 0 0 20px rgba(92, 106, 196, 0.3);
+            transition: all 0.3s ease;
         }
 
         @keyframes gradientShift {
@@ -138,7 +206,7 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Landing screen */
+        /* Enhanced Landing screen */
         .landing-screen {
             position: fixed;
             top: 0;
@@ -153,6 +221,7 @@
             z-index: 1000;
             transition: opacity 1.5s ease, visibility 1.5s ease;
             backdrop-filter: blur(5px);
+            overflow: hidden;
         }
 
         .landing-content {
@@ -160,6 +229,8 @@
             max-width: 800px;
             padding: 2rem;
             animation: fadeIn 1.5s ease-out;
+            position: relative;
+            z-index: 2;
         }
 
         @keyframes fadeIn {
@@ -187,16 +258,11 @@
             50% { text-shadow: 0 0 25px rgba(161, 140, 209, 0.9), 0 0 35px rgba(138, 99, 210, 0.7); }
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
         .landing-subtitle {
             font-size: 1.5rem;
             margin-bottom: 2rem;
             opacity: 0.8;
+            font-weight: 300;
         }
 
         .enter-btn {
@@ -212,6 +278,8 @@
             position: relative;
             overflow: hidden;
             z-index: 1;
+            font-weight: 600;
+            letter-spacing: 1px;
         }
 
         .enter-btn::before {
@@ -803,14 +871,19 @@
     </nav>
 
     <div class="landing-screen" id="landingScreen">
+        <div class="background-elements">
+            <div class="orbit orbit-1"></div>
+            <div class="orbit orbit-2"></div>
+            <div class="planet planet-1"></div>
+            <div class="planet planet-2"></div>
+            <div class="planet planet-3"></div>
+        </div>
         <div class="landing-content">
-            <h1 class="landing-title">Space Explorer</h1>
+            <h1 class="landing-title">Nova</h1>
             <p class="landing-subtitle">Journey Through the Cosmos of Innovation</p>
             <button class="enter-btn" id="enterBtn">Enter the Galaxy</button>
         </div>
     </div>
-
-    <div class="stars" id="stars"></div>
 
     <div class="planet planet-1"></div>
     <div class="planet planet-2"></div>
@@ -909,7 +982,7 @@
         </section>
 
         <footer class="footer">
-            <p>&copy; 2023 Space Explorer | Crafted with ❤️ in the digital cosmos</p>
+            <p>&copy; 2025 Nova Explorer | Crafted with hatred by Wuraitro.</p>
         </footer>
     </div>
 
@@ -919,33 +992,25 @@
     </audio>
 
     <script>
-        function createStars() {
-            const starsContainer = document.getElementById('stars');
-            const starCount = 200;
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-                const x = Math.random() * 100;
-                const y = Math.random() * 100;
-                const size = Math.random() * 2 + 0.5;
-                const duration = 2 + Math.random() * 8;
-                const delay = Math.random() * 5;
-                star.style.left = `${x}%`;
-                star.style.top = `${y}%`;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                star.style.setProperty('--duration', `${duration}s`);
-                star.style.animationDelay = `${delay}s`;
-                starsContainer.appendChild(star);
-            }
-        }
-
         function initLandingScreen() {
             const landingScreen = document.getElementById('landingScreen');
             const enterBtn = document.getElementById('enterBtn');
             const backgroundMusic = document.getElementById('backgroundMusic');
             
             enterBtn.addEventListener('click', () => {
+                // Try to play audio on user interaction
+                backgroundMusic.play().catch(e => {
+                    console.log("Audio play failed:", e);
+                    // If autoplay fails, try to play after a small delay
+                    setTimeout(() => {
+                        backgroundMusic.play().catch(e2 => console.log("Audio play failed after delay:", e2));
+                    }, 100);
+                });
+                
+                // Hide landing screen
+                landingScreen.classList.add('hidden');
+                
+                // Request fullscreen if supported
                 if (document.documentElement.requestFullscreen) {
                     document.documentElement.requestFullscreen();
                 } else if (document.documentElement.webkitRequestFullscreen) {
@@ -955,10 +1020,9 @@
                 } else if (document.documentElement.msRequestFullscreen) {
                     document.documentElement.msRequestFullscreen();
                 }
-                backgroundMusic.play().catch(e => console.log("Audio play failed:", e));
-                landingScreen.classList.add('hidden');
             });
             
+            // Auto-hide landing screen after 5 seconds if not clicked
             setTimeout(() => {
                 if (!landingScreen.classList.contains('hidden')) {
                     landingScreen.classList.add('hidden');
@@ -1021,7 +1085,6 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            createStars();
             initLandingScreen();
             initNavigation();
             initDiscordCopy();
