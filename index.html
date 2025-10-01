@@ -28,7 +28,7 @@
       width: 100vw;
       height: 100vh;
       object-fit: cover;
-      transform-origin: 42% center; /* Focus slightly left */
+      transform-origin: 43% center; /* Slightly left of center */
       transition: transform 1.8s ease-in-out;
       z-index: 1;
     }
@@ -50,18 +50,19 @@
       width: 100%;
       text-align: center;
       font-family: 'Courier New', Courier, monospace;
-      font-size: 2em;
+      font-size: 2.5em; /* Bigger text */
       color: crimson;
       text-shadow: 2px 2px 5px black;
       opacity: 0;
-      animation: fadeIn 2s forwards;
+      animation: fadeInOut 3s forwards;
       z-index: 3;
     }
 
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
+    @keyframes fadeInOut {
+      0% { opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; }
     }
   </style>
 </head>
@@ -79,19 +80,19 @@
     const audio = document.getElementById('nightmareAudio');
 
     const lyrics = [
-      "I have been dreaming!",
-      "I'm in a nightmare",
-      "I'm in a nightmare",
-      "NO",
-      "WAKE UP",
-      "PLEASE WAKE UP",
-      "PLEASE WAKE UP",
-      "PLEASE WAKE UP",
-      "PLEASE WAKE UP"
+      { text: "I have been dreaming!", delay: 0 },
+      { text: "I'm in a nightmare", delay: 1000 },
+      { text: "I'm in a nightmare", delay: 2000 },
+      { text: "NO", delay: 3000 },
+      { text: "WAKE UP", delay: 4000 },
+      { text: "PLEASE WAKE UP", delay: 4700 },
+      { text: "PLEASE WAKE UP", delay: 5300 },
+      { text: "PLEASE WAKE UP", delay: 5800 },
+      { text: "PLEASE WAKE UP", delay: 6200 }
     ];
 
     container.addEventListener('click', () => {
-      doorImage.style.transform = 'scale(5)'; // Maximum zoom
+      doorImage.style.transform = 'scale(5)';
       setTimeout(() => {
         overlay.style.opacity = 1;
         audio.play();
@@ -100,14 +101,14 @@
     });
 
     function showLyrics() {
-      lyrics.forEach((line, index) => {
+      lyrics.forEach(({ text, delay }) => {
         setTimeout(() => {
           const textEl = document.createElement('div');
           textEl.className = 'text';
-          textEl.textContent = line;
-          textEl.style.top = `${30 + index * 5}%`;
+          textEl.textContent = text;
+          textEl.style.top = `${30 + Math.random() * 10}%`;
           document.body.appendChild(textEl);
-        }, 1000 * index);
+        }, delay);
       });
     }
   </script>
