@@ -21,16 +21,25 @@
       cursor: pointer;
     }
 
-    #doorImage {
+    #doorImage, #revealImage {
       position: absolute;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
       object-fit: cover;
+      z-index: 1;
+    }
+
+    #doorImage {
       transform-origin: 43% center;
       transition: transform 1.8s ease-in-out;
-      z-index: 1;
+    }
+
+    #revealImage {
+      opacity: 0;
+      transition: opacity 3s ease-in-out;
+      z-index: 4;
     }
 
     #overlay {
@@ -94,15 +103,19 @@
 <body>
   <div id="container">
     <img id="doorImage" src="https://uploads.onecompiler.io/43xydmfgq/43xyvrefk/376c6132-5e16-46b5-b3b8-f7b3870db33a.png" alt="The Secret Door" />
+    <img id="revealImage" src="https://uploads.onecompiler.io/43xydmfgq/43xyvrefk/Dead.png" alt="The Room" />
     <div id="overlay"></div>
     <audio id="nightmareAudio" src="Nightmare.mp3"></audio>
+    <audio id="toldAudio" src="Told.mp3"></audio>
   </div>
 
   <script>
     const container = document.getElementById('container');
     const doorImage = document.getElementById('doorImage');
+    const revealImage = document.getElementById('revealImage');
     const overlay = document.getElementById('overlay');
-    const audio = document.getElementById('nightmareAudio');
+    const nightmareAudio = document.getElementById('nightmareAudio');
+    const toldAudio = document.getElementById('toldAudio');
 
     const lyrics = [
       { text: "I have been dreaming!", delay: 0 },
@@ -126,9 +139,13 @@
       doorImage.style.transform = 'scale(5)';
       setTimeout(() => {
         overlay.style.opacity = 1;
-        audio.play();
+        nightmareAudio.play();
         startLyrics();
         setInterval(spawnWhispers, 150);
+        setTimeout(() => {
+          revealImage.style.opacity = 1;
+          toldAudio.play();
+        }, 8500); // Reveal and play Told.mp3 after last lyric
       }, 1800);
     });
 
