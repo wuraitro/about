@@ -28,7 +28,7 @@
       width: 100vw;
       height: 100vh;
       object-fit: cover;
-      transform-origin: 43% center; /* Slightly left of center */
+      transform-origin: 43% center;
       transition: transform 1.8s ease-in-out;
       z-index: 1;
     }
@@ -45,24 +45,49 @@
       z-index: 2;
     }
 
-    .text {
+    .lyric {
       position: absolute;
       width: 100%;
       text-align: center;
+      top: 50%;
+      transform: translateY(-50%);
       font-family: 'Courier New', Courier, monospace;
-      font-size: 2.5em; /* Bigger text */
+      font-size: 3em;
       color: crimson;
       text-shadow: 2px 2px 5px black;
       opacity: 0;
-      animation: fadeInOut 3s forwards;
+      animation: fadeLyric 1.5s forwards;
       z-index: 3;
     }
 
-    @keyframes fadeInOut {
+    @keyframes fadeLyric {
       0% { opacity: 0; }
       20% { opacity: 1; }
       80% { opacity: 1; }
       100% { opacity: 0; }
+    }
+
+    .whisper {
+      position: absolute;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.8em;
+      color: rgba(255, 0, 0, 0.3);
+      animation: fadeWhisper 1.5s ease-in-out forwards, shake 0.3s infinite;
+      z-index: 2;
+    }
+
+    @keyframes fadeWhisper {
+      0% { opacity: 0; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.2); }
+      100% { opacity: 0; transform: scale(1); }
+    }
+
+    @keyframes shake {
+      0% { transform: translate(0, 0) rotate(var(--angle)); }
+      25% { transform: translate(-1px, 1px) rotate(var(--angle)); }
+      50% { transform: translate(1px, -1px) rotate(var(--angle)); }
+      75% { transform: translate(-1px, -1px) rotate(var(--angle)); }
+      100% { transform: translate(1px, 1px) rotate(var(--angle)); }
     }
   </style>
 </head>
@@ -80,15 +105,21 @@
     const audio = document.getElementById('nightmareAudio');
 
     const lyrics = [
-      { text: "I have been dreaming!", delay: 0 },
-      { text: "I'm in a nightmare", delay: 1000 },
-      { text: "I'm in a nightmare", delay: 2000 },
-      { text: "NO", delay: 3000 },
-      { text: "WAKE UP", delay: 4000 },
-      { text: "PLEASE WAKE UP", delay: 4700 },
-      { text: "PLEASE WAKE UP", delay: 5300 },
-      { text: "PLEASE WAKE UP", delay: 5800 },
-      { text: "PLEASE WAKE UP", delay: 6200 }
+      "I have been dreaming!",
+      "I'm in a nightmare",
+      "I'm in a nightmare",
+      "NO",
+      "WAKE UP",
+      "PLEASE WAKE UP",
+      "PLEASE WAKE UP",
+      "PLEASE WAKE UP",
+      "PLEASE WAKE UP"
+    ];
+
+    const whispers = [
+      "Why", "Help", "No", "Wake up", "Please", "Dream?", "Lost", "Alone",
+      "Trapped", "Fear", "Run", "Dark", "Pain", "Gone", "Echo", "Shiver",
+      "Don't", "Can't", "Stop", "Sleep", "Scream", "Where", "Who", "What"
     ];
 
     container.addEventListener('click', () => {
@@ -96,20 +127,42 @@
       setTimeout(() => {
         overlay.style.opacity = 1;
         audio.play();
-        showLyrics();
-      }, 1800); // Matches zoom duration
+        startLyrics();
+        setInterval(spawnWhispers, 150);
+      }, 1800);
     });
 
-    function showLyrics() {
-      lyrics.forEach(({ text, delay }) => {
+    function startLyrics() {
+      let delay = 0;
+      lyrics.forEach((line, index) => {
         setTimeout(() => {
-          const textEl = document.createElement('div');
-          textEl.className = 'text';
-          textEl.textContent = text;
-          textEl.style.top = `${30 + Math.random() * 10}%`;
-          document.body.appendChild(textEl);
+          const lyricEl = document.createElement('div');
+          lyricEl.className = 'lyric';
+          lyricEl.textContent = line;
+          document.body.appendChild(lyricEl);
+          setTimeout(() => lyricEl.remove(), 1500);
         }, delay);
+
+        // Speed up after "NO"
+        delay += (line === "NO") ? 800 : 1600;
       });
+    }
+
+    function spawnWhispers() {
+      const whisperEl = document.createElement('div');
+      whisperEl.className = 'whisper';
+      whisperEl.textContent = whispers[Math.floor(Math.random() * whispers.length)];
+
+      const top = Math.random() * 100;
+      const left = Math.random() * 100;
+      const angle = Math.floor(Math.random() * 360);
+
+      whisperEl.style.top = `${top}%`;
+      whisperEl.style.left = `${left}%`;
+      whisperEl.style.setProperty('--angle', `${angle}deg`);
+
+      document.body.appendChild(whisperEl);
+      setTimeout(() => whisperEl.remove(), 1500);
     }
   </script>
 </body>
