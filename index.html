@@ -28,7 +28,7 @@
       width: 100vw;
       height: 100vh;
       object-fit: cover;
-      transform-origin: 42% center; /* Slightly left of center */
+      transform-origin: 42% center; /* Focus slightly left */
       transition: transform 1.8s ease-in-out;
       z-index: 1;
     }
@@ -91,7 +91,7 @@
     ];
 
     container.addEventListener('click', () => {
-      doorImage.style.transform = 'scale(3.5)';
+      doorImage.style.transform = 'scale(5)'; // Maximum zoom
       setTimeout(() => {
         overlay.style.opacity = 1;
         audio.play();
