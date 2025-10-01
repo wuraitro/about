@@ -143,8 +143,12 @@
           setTimeout(() => lyricEl.remove(), 1500);
         }, delay);
 
-        // Speed up after "NO"
-        delay += (line === "NO") ? 800 : 1600;
+        // Speed up after second "I'm in a nightmare"
+        if (index <= 2) {
+          delay += 1600;
+        } else {
+          delay += 800;
+        }
       });
     }
 
