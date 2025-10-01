@@ -56,7 +56,7 @@
       color: crimson;
       text-shadow: 2px 2px 5px black;
       opacity: 0;
-      animation: fadeLyric 1.5s forwards;
+      animation: fadeLyric 1.2s forwards;
       z-index: 3;
     }
 
@@ -105,15 +105,15 @@
     const audio = document.getElementById('nightmareAudio');
 
     const lyrics = [
-      "I have been dreaming!",
-      "I'm in a nightmare",
-      "I'm in a nightmare",
-      "NO",
-      "WAKE UP",
-      "PLEASE WAKE UP",
-      "PLEASE WAKE UP",
-      "PLEASE WAKE UP",
-      "PLEASE WAKE UP"
+      { text: "I have been dreaming!", delay: 0 },
+      { text: "I'm in a nightmare", delay: 1400 },
+      { text: "I'm in a nightmare", delay: 2800 },
+      { text: "NO", delay: 4000 },
+      { text: "WAKE UP", delay: 4800 },
+      { text: "PLEASE WAKE UP", delay: 5400 },
+      { text: "PLEASE WAKE UP", delay: 5900 },
+      { text: "PLEASE WAKE UP", delay: 6400 },
+      { text: "PLEASE WAKE UP", delay: 6900 }
     ];
 
     const whispers = [
@@ -133,22 +133,14 @@
     });
 
     function startLyrics() {
-      let delay = 0;
-      lyrics.forEach((line, index) => {
+      lyrics.forEach(({ text, delay }) => {
         setTimeout(() => {
           const lyricEl = document.createElement('div');
           lyricEl.className = 'lyric';
-          lyricEl.textContent = line;
+          lyricEl.textContent = text;
           document.body.appendChild(lyricEl);
-          setTimeout(() => lyricEl.remove(), 1500);
+          setTimeout(() => lyricEl.remove(), 1200);
         }, delay);
-
-        // Speed up after second "I'm in a nightmare"
-        if (index <= 2) {
-          delay += 1600;
-        } else {
-          delay += 800;
-        }
       });
     }
 
